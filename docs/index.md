@@ -14,19 +14,7 @@
 
 
 TIP: **推荐阅读**
-1、[开放式控制系统编程技术 基于IEC 61131-3国际标准](https://item.jd.com/13138697.html)  
-2、[TwinCAT 3.1 从入门到精通](https://item.jd.com/12876376.html)  
-3、[西门子S7-1200/1500 PLC SCL语言编程从入门到精通](https://item.jd.com/13034511.html)
+1、[开放式控制系统编程技术 基于IEC 61131-3国际标准](https://item.jd.com/13138697.html){target=_blank}  
+2、[TwinCAT 3.1 从入门到精通](https://item.jd.com/12876376.html){target=_blank}  
+3、[西门子S7-1200/1500 PLC SCL语言编程从入门到精通](https://item.jd.com/13034511.html){target=_blank}
 
-
-``` iecst
-IF xTest THEN
-	iState:=iState+1;
-END_IF;
-```
-``` py
-import tensorflow as tf
-```
-
-WARNING:
-asdf 

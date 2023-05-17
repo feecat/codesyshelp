@@ -100,7 +100,7 @@ Codesys授权依赖**CodeMeter**服务，CodeMeter是wibu的一套加密软件�
 
 您可以在[license.codesys.com](https://license.codesys.com){target=_blank}上查询许可，一般而言，显示 Available是未激活，显示 Activated 是激活在加密狗中，显示 Not completed是激活在软容器中。软容器的编号主要根据CPU序列号生成，所以重装系统不会变更软容器编号，并可以将旧的授权导入。但CPU损坏则授权也失效。
 
-TIP: **许可的激活步骤** <iframe width="100%" height="800" src="/images/be10c3c1baf440b99995d280da40418b.pdf"></iframe>
+TIP: **许可的激活步骤** <iframe width="100%" height="800" src="../images/be10c3c1baf440b99995d280da40418b.pdf"></iframe>
 
 
 授权激活后，会在PLC根目录生成`CMLicenseNew.WibuCmRaU`文件，后续可通过该文件还原授权。需要注意的是，RTE版本不同有可能导致该文件无法使用，运行正常并且激活后不建议升级/降级RTE版本。

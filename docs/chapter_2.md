@@ -4,7 +4,7 @@
 
 不同的设备在创建项目时会有不同的附加组件，我们以软件安装时自带的ControlWin举例来展示操作流程。
 
-您应该可以在右下角托盘区看到Control Win SysTray图标 ![](/images/2-1.png) ，单击后选Start PLC，等待三秒左右图标变红 ![](/images/2-2.png) ，即表示已启动。在没有授权的情况下，ControlWin会运行2小时，之后图标自动变灰。
+您应该可以在右下角托盘区看到Control Win SysTray图标 ![](./images/2-1.png) ，单击后选Start PLC，等待三秒左右图标变红 ![](./images/2-2.png) ，即表示已启动。在没有授权的情况下，ControlWin会运行2小时，之后图标自动变灰。
 
 打开codesys软件，新建标准项目，设备选择CODESYS Control Win V3 x64，确认即可。
 
