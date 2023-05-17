@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>5 进阶调试 - CODESYS进阶与提升</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link href="../highlight.css" rel="stylesheet" />
+        <link href="../style.css" rel="stylesheet" />
+    
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "5 \u8fdb\u9636\u8c03\u8bd5";
+        var mkdocs_page_input_path = "chapter_5.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+    <script src="../resources/highlight.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+ 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> CODESYS进阶与提升
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">0 引言</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_1/">1 软件安装</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_2/">2 基础知识</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_3/">3 总线的专用设置</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_4/">4 visu、softmotion、附加功能</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">5 进阶调试</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#51">5.1 断点、流控制及跟踪</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#52">5.2 变量的在线操作</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#53">5.3 异常和内核转储</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#54">5.4 日志和实时性</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#55">5.5 系统操作</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_6/">6 实战技巧</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">CODESYS进阶与提升</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a> &raquo;</li>
+      <li>5 进阶调试</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="5">5 进阶调试</h1>
+<h2 id="51">5.1 断点、流控制及跟踪</h2>
+<p>在单片机编程中，断点是非常好用的工具，因为单片机资源较少，调试时无法在线显示变量值（会影响单片机运行速度）。而CODESYS可以在线查看程序中的变量实际值，也可以用监视窗口监视多个变量而不影响PLC的运行。此外，断点会导致轴控制急停、总线停止输出等问题，所以在实际应用中很少使用断点进行调试，但在一些For、While循环的调试中仍有必要使用断点。</p>
+<p>流控制可以看到在前几个周期内PLC执行了哪些代码，可以清晰直观地看到某一段代码有没有被执行，但可能会导致PLC抖动增加，一般也不使用。</p>
+<p>跟踪是最常用的调试功能，相当于时基为依附任务周期的示波器，可以添加多个变量并记录它们的变化过程。一般用于监视CASE的分步、BOOL、REAL、INT变量值等操作。</p>
+<h2 id="52">5.2 变量的在线操作</h2>
+<p>在创建总线对象后，如果地址没有被使用的地方，则会按默认优化不显示实际值，此时变量的实际值为灰色，表明该变量不是实际值。要强置设备同步IO，需要在IO映射的右下角选择使能2。</p>
+<p>我们可以对一个变量做赋值，例如iTest默认值为0，我们可以在任意时间对其赋值为2。但需要注意的是，赋值过程是在一个PLC周期结束后执行，强制赋值是在每一个PLC周期结束后执行。如果代码中有对该变量做写入的操作，则变量显示值与实际值会有不同（复写）。</p>
+<p>复写操作在调试中也经常遇到，我们要尽量避免一个周期内对变量的多个操作，如果在周期开始时对变量写TRUE，周期中间读取了这个变量，周期结束时对这个变量写FALSE，则在监视和TRACE中都无法观察到该变量被写过TRUE的步骤，增加调试难度。</p>
+<h2 id="53">5.3 异常和内核转储</h2>
+<p>CODESYS会自动监控几种异常情况，如除零、无限循环和CPU占用过高等。发生异常后PLC会完全停止在异常点，此时可以用软件登陆上即可看到问题发生的具体代码位置。此外，还可以用内核转储将异常状态存储下来，方便之后复盘问题。</p>
+<p>最常见的异常原因为除零，请在做除法运算前用Limit或IF判断，尽量避免异常的发生。</p>
+<h2 id="54">5.4 日志和实时性</h2>
+<p>日志是检查系统问题的首要位置，您可以在设备页里检查设备日志。某些总线还有独立的日志。</p>
+<h2 id="55">5.5 系统操作</h2>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../chapter_4/" class="btn btn-neutral float-left" title="4 visu、softmotion、附加功能"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../chapter_6/" class="btn btn-neutral float-right" title="6 实战技巧">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../chapter_4/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../chapter_6/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
