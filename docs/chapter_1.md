@@ -8,13 +8,12 @@ CODESYS是德国3S公司开发的PLC软件，集成了PLC逻辑、运动控制�
 
 旧版的CODESYS软件现在很少见，版本号是2.3.9，界面类似TwinCAT2。本文档主要面向版本号在3.5.9以上的新版codesys软件。开发环境推荐CPU不低于4核2Ghz，4G内存，128G固态硬盘，WIN10及以上操作系统。
 
-常见的文件后缀：  
-
-- 项目文件：**\*.project**
-- 项目文件打包：**\*.projectarchive**（包含项目、库、图片等可选的打包文件，双击解压）
-- 包文件：**\*.package**（包含库、设备描述文件等，双击安装）
-- 库文件：**\*.library**（纯库实现，通过库管理器安装）
-- 设备描述文件：**\*.xml** 、 **\*.gsdxml** 、 **\*.eds**（纯设备实现，通过设备管理器安装）
+TIP: **常见的文件后缀：**
+项目文件：**\*.project**  
+项目打包：**\*.projectarchive**（包含项目、库、图片等可选的打包文件，双击解压）  
+包文件：**\*.package**（包含库、设备描述文件等，双击安装）  
+库文件：**\*.library**（纯库实现，通过库管理器安装）  
+设备描述文件：**\*.xml** 、 **\*.gsdxml** 、 **\*.eds**（纯设备实现，通过设备管理器安装）  
 
 
 ## 1.2 与其它plc软件的差异性
@@ -94,11 +93,11 @@ NOTE: 建议取消用户管理（默认强制的登录密码保护）：编辑�
 
 所有受支持的电脑和设备都可以安装CODESYS RTE，主要包括x86 Windows、x86 Linux和arm Linux。当前的政策是无授权状态下可以运行总线、softmotion、visu等功能30分钟，RTE本身和PLC逻辑2小时，超出时间后会停止对应的功能或退出RTE。激活授权后可以无限制地使用对应授权的功能。
 
-部分授权是针对OEM厂商的，只有特定厂商的设备才可以被激活，厂商标识通过SysTargetOEM驱动指定或包含在RTE本体中。一般而言，单条授权码包含多项功能（如RTE SM WV）即为OEM定制版授权。您可以在[store.codesys.cn](http://store.codesys.cn){target=_blank}或[store.codesys.com](https://store.codesys.com){target=_blank}上查看有哪些授权，各包含什么功能。
+部分授权是针对OEM厂商的，只有特定厂商的设备才可以被激活，厂商标识通过SysTargetOEM驱动指定或包含在RTE本体中。一般而言，单条授权码包含多项功能（如RTE SM WV）即为OEM定制版授权。您可以在 [store.codesys.cn](http://store.codesys.cn){target=_blank}或[store.codesys.com](https://store.codesys.com){target=_blank} 上查看有哪些授权，各包含什么功能。有些厂商如汇川、施耐德、禾川等不需要授权，它们集成在定制版RTE或驱动中。
 
 Codesys授权依赖**CodeMeter**服务，CodeMeter是wibu的一套加密软件，可通过软容器或硬件加密狗实现加密。运行时授权可以激活在加密狗上，也可以激活在软容器上。授权激活时IDE所在电脑需要连接网络以访问在线许可服务，激活后可以完全离线。但激活后授权就无法转移，与加密狗或软容器绑定。
 
-您可以在[license.codesys.com](https://license.codesys.com){target=_blank}上查询许可，一般而言，显示 Available是未激活，显示 Activated 是激活在加密狗中，显示 Not completed是激活在软容器中。软容器的编号主要根据CPU序列号生成，所以重装系统不会变更软容器编号，并可以将旧的授权导入。但CPU损坏则授权也失效。
+您可以在 [license.codesys.com](https://license.codesys.com){target=_blank} 上查询许可和激活情况，一般而言，显示 **Available** 是未激活，显示 **Activated** 是激活在加密狗中，显示 **Not completed** 是激活在软容器中。软容器的编号主要根据CPU序列号生成，所以重装系统不会变更软容器编号，并可以将旧的授权导入。但CPU损坏则授权也失效。
 
 TIP: **许可的激活步骤** <iframe width="100%" height="800" src="../images/be10c3c1baf440b99995d280da40418b.pdf"></iframe>
 
