@@ -1,0 +1,25 @@
+site_name: CODESYS进阶与提升
+nav:
+    - 0 引言: index.md
+    - 1 软件安装: chapter_1.md
+    - 2 基础知识: chapter_2.md
+    - 3 总线的专用设置: chapter_3.md
+    - 4 visu、softmotion、附加功能: chapter_4.md
+    - 5 进阶调试: chapter_5.md
+    - 6 实战技巧: chapter_6.md
+
+    
+theme:
+    name: readthedocs
+    custom_dir: docs/resources/
+    highlightjs: false
+
+extra_css:
+    - highlight.css
+    - style.css
+
+markdown_extensions:
+    - attr_list
+    - def_list
+    - tables
+    - callouts

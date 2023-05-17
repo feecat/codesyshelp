@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>2 基础知识 - CODESYS进阶与提升</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link href="../highlight.css" rel="stylesheet" />
+        <link href="../style.css" rel="stylesheet" />
+    
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "2 \u57fa\u7840\u77e5\u8bc6";
+        var mkdocs_page_input_path = "chapter_2.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+    <script src="../resources/highlight.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+ 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> CODESYS进阶与提升
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">0 引言</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_1/">1 软件安装</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">2 基础知识</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#21">2.1 代码的编译、下载与运行</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#22">2.2 设备树与程序树对象</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#23">2.3 任务的执行过程</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#24">2.4 包、库、设备管理器</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#25">2.5 占位符和版本管理</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#26">2.6 二进制文件与加密</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_3/">3 总线的专用设置</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_4/">4 visu、softmotion、附加功能</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_5/">5 进阶调试</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_6/">6 实战技巧</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">CODESYS进阶与提升</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a> &raquo;</li>
+      <li>2 基础知识</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="2">2 基础知识</h1>
+<h2 id="21">2.1 代码的编译、下载与运行</h2>
+<p>不同的设备在创建项目时会有不同的附加组件，我们以软件安装时自带的ControlWin举例来展示操作流程。</p>
+<p>您应该可以在右下角托盘区看到Control Win SysTray图标 <img alt="" src="/images/2-1.png" /> ，单击后选Start PLC，等待三秒左右图标变红 <img alt="" src="/images/2-2.png" /> ，即表示已启动。在没有授权的情况下，ControlWin会运行2小时，之后图标自动变灰。</p>
+<p>打开codesys软件，新建标准项目，设备选择CODESYS Control Win V3 x64，确认即可。</p>
+<p>当您对程序作出修改并登陆时，会提示在线修改。在线修改不会停止PLC，且默认不更新启动应用。如果在线修改过程序且未更新启动应用，则PLC下次重启后仍会运行上一次的启动应用，故建议下载时勾选更新启动应用，或在关机前手动更新启动应用。</p>
+<h2 id="22">2.2 设备树与程序树对象</h2>
+<p>对于程序的大多数操作都在Device选项卡内，可以理解为文件管理器，在里面创建POU程序、Visu、总线等对象。在一个项目中可以有多个Device，一个Device内可以有不同的Application。可以同时登录多个Device，但同一时刻在一个Device内只可以激活一个Application。大多数情况下，我们使用默认的单Device、单Application方案。</p>
+<p>在项目上右键可以添加第二个Device，在Device上右键可以添加总线和设备，在PLC Logic上右键可以添加第二个Application，在Application上右键可以添加程序块、visu等元素。</p>
+<h2 id="23">2.3 任务的执行过程</h2>
+<p>任务由运行时按照编译后的二进制文件执行，而二进制文件由项目生成。</p>
+<p>所有项目中都有任务管理器（Task Configuration），在其中配置任务。</p>
+<p>常用的任务只有两种，周期任务（Cyclic）和无限循环任务（Freewheeling）。</p>
+<p>程序块（POU）可以被任务（IEC-Tasks）调用，依附在任务上，任务组按照优先级和循环周期执行，任务组内的不同程序块按照自上而下的顺序执行。在程序中也可以对其它程序调用，和任务处理方式没有区别。</p>
+<p>具体到代码中，程序也是自上而下执行的，整个程序执行两遍的间隔即为任务周期。一般来说，单个周期实际执行时间需要1~1000微秒，剩下的时间都是在等待下一个周期。</p>
+<h2 id="24">2.4 包、库、设备管理器</h2>
+<p>后缀名为package的文件为包，其中会包括设备描述、库，有些package还会在菜单中增加一些选项。</p>
+<p>后缀名为library或compiled-library的文件为库，有些库是编译后的库不含有源代码（如官方的所有库），有些库含有源代码（oscat库），有些库含有源代码但有加密（私有库，不推荐，加密有破解风险）。</p>
+<p>设备管理器分为运行时设备和总线设备，它们都在设备管理器里管理。有些旧版本的codesys需要手动选择文件后缀过滤，否则可能误识别。</p>
+<p>当您把项目分发给其他人时，可能会遇到缺库的情况。可以打包为ProjectArchive文件，用相同版本或更高版本IDE打开后所有选项选否，即可自动补全库。</p>
+<h2 id="25">2.5 占位符和版本管理</h2>
+<p>库管理器管理库的版本，一般情况下建议根据ide版本设置为最新。当您打开一个较旧或较新的项目时，会提示是否更新库和配置。根据实际情况选择更新到最新版或保持项目版本。若有缺失库的情况，可在库管理器中下载缺失的库。</p>
+<p>如果有网络不好或下载不了库的情况，也可以通过占位符手动修改版本号，但大多数情况下推荐用Project-Project Environment来更新版本。</p>
+<h2 id="26">2.6 二进制文件与加密</h2>
+<p>PLC逻辑经过编译后的文件就是二进制文件，该文件只有运行时可以执行。文件格式为app。此外，同目录下还包含crc文件，每次运行时都会进行CRC校验。</p>
+<p>与TIA不同的是，CODESYS默认不会上传源代码，只会上传编译后的二进制文件。一般意义上认为二进制文件是无法破解的。而运行时的加密主要防范广域网的攻击而非内部拷贝，所以一般不建议使用运行时加密。</p>
+<p>项目文件的加密分为两个等级，一个是项目文件的自身加密，每次打开时需要输入密码。第二个是用户组加密，可以对不同的POU赋予不同的用户组权限，在多人参与维护的程序中非常好用。</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../chapter_1/" class="btn btn-neutral float-left" title="1 软件安装"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../chapter_3/" class="btn btn-neutral float-right" title="3 总线的专用设置">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../chapter_1/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../chapter_3/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
