@@ -168,6 +168,7 @@ sDateAndTime := DT_TO_STRING(dtDateAndTime);//将时间从DT转换为STRING，�
 sDate := MID(sDateAndTime , 10 , 4);//获取当前日期，格式2001-01-01
 sTime := RIGHT(sDateAndTime , 8);//获取当前时间，格式00:00:00
 </code></pre>
+<hr />
 <h3 id="_2">大小端</h3>
 <p>在和西门子或Modbus设备通讯时容易遇到大小端问题，一个32位的数据会拆分成4个byte，如果发送方是ABCD，则接收端可能是CDAB，这就是大小端问题。
 大小端有很多种解法，例如创建数组关联每一位、创建联合体等，在这里我提出一个较简单的写法：</p>
@@ -182,6 +183,7 @@ FUN_EC:=SHL(dwInput,16) OR SHR(dwInput,16);
 <pre><code class="language-iecst">aa := DWORD_TO_DINT(FUN_EC(bb));
 cc := FUN_EC(DINT_TO_DWORD(dd));
 </code></pre>
+<hr />
 <h3 id="_3">关机</h3>
 <p>所有的带系统的PLC，如Linux、WES7、WIN10系统，都需要正常的关机流程或配备UPS模块。不带系统的或经过OEM厂商特殊优化的Linux除外。如果没有优化过系统断电，则需要手动关机。为了不破坏用户体验，一般会在界面上写一个按钮或关联UPS的输出变量来自动关机。</p>
 <ul>
@@ -210,6 +212,7 @@ IF xShutdown THEN
     xShutdown := FALSE;
 END_IF
 </code></pre>
+<hr />
 <h3 id="_4">获取序列号</h3>
 <p>如果系统对客户开放，则第三方也可以拷出来编译后的二进制文件运行（但不可修改）。若有加强保密的需要，可添加序列号校验。该方式不是绝对的安全，编译后的二进制文件只有CRC校验，没有混淆加密，相对于运行时更易被破解。在库管理器中添加<code>SysTarget</code>和<code>SysTypes2 Interfaces</code>库，在程序中：</p>
 <pre><code class="language-iecst">VAR
@@ -224,8 +227,9 @@ IF psSN = 0 THEN
 END_IF
 sSN := psSN^;
 </code></pre>
+<hr />
 <h3 id="_5">处理变量越界</h3>
-<p>一个光栅式单圈编码器转一圈会回零，在驱动中会用已记录的圈数乘以一圈脉冲量再加上当前脉冲量来获取位置。变量也是类似，一个16位的变量会越界，越界结果是回零或正/负极限。根据突变规律可以将16位扩展到32位，就不会越界了。</p>
+<p>单圈绝对值编码器转一圈读数会回零，在驱动中会用已记录的圈数乘以一圈脉冲量再加上当前脉冲量来获取位置。变量也是类似，一个32位的变量会越界，越界结果是回零或正/负极限。根据突变规律可以将32位扩展到64位，就不会越界了。同样的道理也可以应用在16位扩展32位上。</p>
 <pre><code class="language-iecst">FUNCTION_BLOCK FB_PosCalc
 VAR_INPUT
     In:DINT;
@@ -241,9 +245,8 @@ VAR
     diTemp:DINT;
     udiOffset: UDINT;
 END_VAR
-</code></pre>
-<p>功能块程序：</p>
-<pre><code class="language-iecst">//越界后正负不好判断，转为UDINT后判断越界
+
+//越界后正负不好判断，转为UDINT后判断越界
 udiTemp:=DINT_TO_UDINT(In);
 
 //正向越界（11xxx=&gt;00xxx），当前值00，旧值11。反向越界（00xxx=&gt;11xxx）,当前值11，旧值00。
