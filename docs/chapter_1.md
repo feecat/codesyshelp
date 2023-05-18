@@ -8,7 +8,7 @@ CODESYS是德国3S公司开发的PLC软件，集成了PLC逻辑、运动控制�
 
 旧版的CODESYS软件现在很少见，版本号是2.3.9，界面类似TwinCAT2。本文档主要面向版本号在3.5.9以上的新版codesys软件。开发环境推荐CPU不低于4核2Ghz，4G内存，128G固态硬盘，WIN10及以上操作系统。
 
-TIP: **常见的文件后缀：**
+TIP: **常见的文件后缀**
 项目文件：**\*.project**  
 项目打包：**\*.projectarchive**（包含项目、库、图片等可选的打包文件，双击解压）  
 包文件：**\*.package**（包含库、设备描述文件等，双击安装）  
@@ -39,35 +39,64 @@ TIP: **常见的文件后缀：**
 
 虽然CODESYS支持OOP，但在实际应用中，OOP会造成代码结构庞大、不易调试及检查。此外，方法、属性、动作的不规范使用也是实际应用问题的多发点。使用OOP方式编程的代码也不易转到其它系统上。
 
-如果您对OOP感兴趣，确保不要为了面向对象而面向对象地编程。OOP只是一种编程思路，如果面向过程的思路遇到了困难，那么面向对象一样会有困难。大多数面向过程解决不了的问题可以通过封装Function、Function Block和指针、内存的操作解决，如果这还解决不了，请考虑将算法、顶层控制等内容通过C++、C#、Python、JS等语言编写并通过Shared Memory、TCP等通讯方式与PLC交互。
+如果您对OOP感兴趣，确保不要为了面向对象而面向对象地编程。OOP只是一种编程思路，如果面向过程的思路遇到了困难，那么面向对象一样会有困难。大多数面向过程解决不了的问题可以通过CASE分步、封装Function Block和指针、内存的操作解决，如果这还解决不了，请考虑将算法、顶层控制等内容通过C++、C#、Python、JS等语言编写并通过Shared Memory、TCP等通讯方式与PLC交互。
 
 ## 1.4 开发环境安装及设置
 CODESYS历经多个版本，不同版本安装过程会有细微的差异，请根据您安装时的提示灵活多变。本文展示3.5.17.30的开发环境安装。
 
+WARNING: **关闭杀毒软件**
 安装前建议关闭Windows Defender及其它杀毒软件，由于安装过程会创造很多小文件，对这些小文件的病毒扫描会极大地延长安装时间。如果您之前安装过其它版本的CODESYS，建议手动删除`C:\ProgramData\CODESYS`文件夹，这将删除所有旧版的库、设备和配置，但可以创建相对干净的安装环境。
 
+安装包名称为 **CODESYS 64 3.5.17.30.exe** ，大小约1.9G。双击开始安装。首次安装会自动检测缺失的运行库，单击Install进行安装（运行库部分）。
 
+![](./images/1-2.png) ![](./images/1-3.png)
+
+安装完运行库后，安装程序会消失几秒钟（仍在后台处理，不要重复运行安装程序），之后进入正式安装程序。安装过程一路下一步即可。
+
+![](./images/1-4.png) ![](./images/1-6.png)
+
+3.5.16之后的版本安装需要10~30分钟，显示Install all Packages时请耐心等待，此处没有进度条。
+
+![](./images/1-8.png) ![](./images/1-9.png)
 
 安装完软件后，请确保您系统右下角托盘中有以下三个图标：
 
-CODESYS Control Win SysTray（用于仿真）
+1. ![](./images/1-10.png) CODESYS Control Win SysTray（用于仿真）
+2. ![](./images/1-11.png) CODESYS Gateway SysTray（用于扫描设备及连接）
+3. ![](./images/1-12.png) CodeMeter（用于授权管理）
 
-CODESYS Gateway SysTray（用于扫描设备及连接）
-
-CodeMeter（用于授权管理）
-
+WARNING: **防火墙**
 如果您将本地连接设为不信任网络（公用网络），则还需要在防火墙中打开CODESYS的公用网络权限或关闭防火墙。
 
-在使用IDE的过程中，建议您将IDE语言设置为英文。目前的中文翻译表达欠佳，且编辑visu时更易导致软件崩溃。CODESYS IDE稳定性相对于TIA软件略差，在编写代码时请注意随时保存。
+TIP: **语言设置**
+在使用IDE的过程中，建议您将IDE语言设置为英文（工具-选项，语言设置，用户界面语言）。目前的中文翻译表达欠佳，且编辑visu时更易导致软件崩溃。CODESYS IDE稳定性相对于TIA软件较差，在编写代码时请注意随时保存。
 
 
 ## 1.5 运行时安装及设置
 
+NOTE: **官方在线化**
+CODESYS从3.5.17开始，包管理器变为在线化的CODESYS Installer，有了更正式的包签名流程。但缺库的问题没有得到缓解，包的离线安装变得更困难了，目录也更乱了。  
+
+>? NOTE: **完全离线安装package-单击展开详情**
+CODESYS Installer（APInstaller）是个彻头彻尾的半成品软件，我想不明白工业基础软件为什么会强制使用在线服务？1.4以上版本甚至还要求Edge Webview2 Runtime但无法离线安装，我十分怀疑3S公司有没有测试工程师？  
+这里简单说一下特定旧版本树莓派4.6.0.0的包如何完全离线装在3.5.17.30的IDE上。虽然是完全离线安装，您还是需要一个可以联网、装有codesys的电脑以提取包文件，该包文件没有公共下载链接，只能通过提取的方式。具体步骤如下：  
+1、确保可联网机器为全新安装，或手动删除CODESYS Edge Gateway for Linux、CODESYS Control SL Extension Package两个包后操作。  
+2、打开可联网机器的CODESYS Installer，单击Change，单击Browse，搜索**raspberry**，版本选4.6.0.0，安装。***下载完成后就可以进到下一步，即使安装结束也不要点OK***。  
+3、找到`C:\Users\[您的用户名]\AppData\Local\Temp\APInstaller`，其中一个文件夹下有以下三个package文件，先拷出来。  
+![](./images/1-15.png)  
+4、接下来是匪夷所思的一步，用7Z打开CODESYS Control for Raspberry PI 4.6.0.0.package，把package.manifest拷出来，编辑66、77行的FromVersion改为4.8.0.0，或者把RefrerenceOptional改为True。改完了再用7Z压回包里替换掉原始文件。  
+5、将三个包文件拷到离线电脑上，依次安装即可。
+
 ### Linux（Raspberry Pi）
 
-Linux（或Raspberry Pi）通过SSH安装，您需要先安装对应的包文件，如CODESYS Control for Raspberry PI 4.6.0.0.package。安装完成后，TOOLS菜单下会多出Update Raspberry pi选项。
+Linux（或Raspberry Pi）通过SSH安装，您需要先安装对应的包，如 **CODESYS Control for Raspberry PI 4.6.0.0.package** 。建议在网络环境下，用CODESYS Installer-Browse搜索raspberry，选择版本号进行安装。
+![](./images/1-14.png) 
 
-输入用户名和密码，输入目标地址，选择版本，单击Install即可安装。
+安装完成后，工具菜单下会多出Update Raspberry pi选项。输入用户名和密码，输入目标IP地址，选择版本，单击Install即可安装。
+
+![](./images/1-13.png)![](./images/1-16.png) 
+
+
 
 ### Windows（Control RTE）
 
@@ -78,13 +107,11 @@ RTE与IDE独立，在一台电脑上可以只安装RTE，也可以先后安装ID
 
 安装完成并重启后，需要在设备管理器里手动安装实时网卡驱动。选择一次驱动并安装后，驱动可能不会更新，需要在已安装驱动列表内再次选择。若还不成功，需手动删除C:\Windows\INF下的net1ic64.inf文件并再次安装驱动即可。安装完驱动后建议重启一次。
 
-运行时常用的设置
-默认配置文件目录如下：
-Linux：`/etc/CODESYSControl_User.cfg`
 
-ControlRTE：`C:\ProgramData\CODESYS\CODESYSControlRTEV3\CODESYSControl_User.cfg`
-
-ControlWin：`C:\ProgramData\CODESYS\CODESYSControlWinV3x64\[一串字母]\CODESYSControl.cfg`
+TIP: **运行时的配置文件所在位置** 
+Linux SL：`/etc/CODESYSControl_User.cfg`  
+ControlRTE：`C:\ProgramData\CODESYS\CODESYSControlRTEV3\CODESYSControl_User.cfg`  
+ControlWin：`C:\ProgramData\CODESYS\CODESYSControlWinV3x64\[一串字母]\CODESYSControl.cfg`  
 
 NOTE: 建议取消用户管理（默认强制的登录密码保护）：编辑配置文件，找到**[CmpUserMgr]** 下的`;SECURITY.UserMgmtEnforce=NO`，删除最前面的`;`符号并保存。
 

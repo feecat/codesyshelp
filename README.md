@@ -4,8 +4,8 @@ CODESYS进阶与提升[https://feecat.github.io/codesyshelp/](https://feecat.git
 
 ----
 
-依赖：mkdocs, mkdocs-callouts
+依赖：mkdocs, markdown-callouts
 
 本地运行：`mkdocs serve`
 
-推送：`mkdocs gh-deploy`
+部署推送：`mkdocs gh-deploy`
