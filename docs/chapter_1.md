@@ -94,18 +94,32 @@ Linux（或Raspberry Pi）通过SSH安装，您需要先安装对应的包，如
 
 安装完成后，工具菜单下会多出Update Raspberry pi选项。输入用户名和密码，输入目标IP地址，选择版本，单击Install即可安装。
 
-![](./images/1-13.png)![](./images/1-16.png) 
+![](./images/1-13.png) ![](./images/1-16.png) 
 
 
 
 ### Windows（Control RTE）
 
-本小节特指x64（win10系统）下安装的RTE。一般情况下，建议使用Intel Core i3/i5/i7系列的标压CPU，4G以上内存，64G以上固态硬盘。请确保网卡在实时驱动的兼容列表中。
+本小节特指x64（win10系统）下安装的RTE。一般情况下，建议使用Intel Core i3/i5/i7系列的标压CPU，4G以上内存，64G以上固态硬盘。请确保网卡在实时驱动的兼容列表中。RTE与IDE独立，在一台电脑上可以只安装RTE，也可以安装IDE和RTE。运行 **CODESYS Control RTE 64 3.5.17.30.exe** 开始安装。
 
-RTE与IDE独立，在一台电脑上可以只安装RTE，也可以先后安装IDE和RTE。运行CODESYS Control RTE 64 3.5.17.30.exe开始安装。
+![](./images/1-17.png) ![](./images/1-18.png) 
+
+安装完基础运行库后，进入安装程序。Windows下的Control RTE是隔离核心的方式，会自动检测有多少个CPU核心并分配其中一个给RTE使用。  
+（2核CPU装完RTE后只有一个核心给Windows，4核CPU装完后还剩3个核心给Windows，所以一般推荐4核。但采用超线程技术的CPU将会禁用超线程，即双核4线程CPU装完后还是只有一个核心给Windows。）
+
+![](./images/1-19.png) ![](./images/1-20.png) 
+
+WARNING: **版本选择和防火墙**
+选择Target Type of RTE时一定要注意，一般来说都是选CODESYS SoftMotion RTE。此外，建议选择打开防火墙权限，否则可能扫描不到设备。
+
+![](./images/1-21.png) ![](./images/1-22.png) 
+
+这里两个都点OK/YES即可。
+
+![](./images/1-23.png) ![](./images/1-24.png) 
 
 
-安装完成并重启后，需要在设备管理器里手动安装实时网卡驱动。选择一次驱动并安装后，驱动可能不会更新，需要在已安装驱动列表内再次选择。若还不成功，需手动删除C:\Windows\INF下的net1ic64.inf文件并再次安装驱动即可。安装完驱动后建议重启一次。
+安装完成并重启后，需要在设备管理器里手动安装实时网卡驱动。选择一次驱动并安装后，驱动可能不会更新，需要在已安装驱动列表内再次选择。若还不成功，需手动删除`C:\Windows\INF\net1ic64.inf`文件并再次安装驱动即可。安装完驱动后建议重启一次。做好配置文件的设置后，在系统托盘区手动启动一遍RTE，确认无问题后勾选Startup中的两个选项，开机后即会自动启动。
 
 
 TIP: **运行时的配置文件所在位置** 
@@ -113,7 +127,8 @@ Linux SL：`/etc/CODESYSControl_User.cfg`
 ControlRTE：`C:\ProgramData\CODESYS\CODESYSControlRTEV3\CODESYSControl_User.cfg`  
 ControlWin：`C:\ProgramData\CODESYS\CODESYSControlWinV3x64\[一串字母]\CODESYSControl.cfg`  
 
-NOTE: 建议取消用户管理（默认强制的登录密码保护）：编辑配置文件，找到**[CmpUserMgr]** 下的`;SECURITY.UserMgmtEnforce=NO`，删除最前面的`;`符号并保存。
+NOTE: **建议取消用户管理（默认强制的登录密码保护）**
+编辑配置文件，找到**[CmpUserMgr]** 下的`;SECURITY.UserMgmtEnforce=NO`，删除最前面的`;`符号并保存。
 
 
 ## 1.6 许可激活和转移
@@ -140,13 +155,13 @@ WARNING:  通常情况下，离线转移并不意味着可以从一台电脑转�
 
 ## 1.7 实时补丁和实时驱动
 
-一般来说，PLC代码的运行需要一个稳定的循环周期以明确代码执行时间及进行通讯。为了保证PLC的周期循环可以顺利执行，需要实时性。在Linux中，实时性要靠Preempt-RT实时补丁保证。在Windows中，分为Control Win和Control RTE两种。安装IDE时会自带Control Win，一般用于仿真，不具有实时性。而Control RTE从专用安装包安装，隔离掉一个物理核心，具有实时性。
+一般来说，PLC代码的运行需要一个稳定的循环周期以明确代码执行时间及进行通讯。为了保证PLC的周期循环可以顺利执行，需要实时性。在Linux中，实时性靠Preempt-RT实时补丁保证。在Windows中，分为Control Win和Control RTE两种。安装IDE时会自带Control Win，一般用于仿真，不具有实时性。而Control RTE从专用安装包安装，隔离掉一个物理核心，具有实时性。
 
 对于EtherCAT：
 
 - Linux通过RAW Sockets，不需要特殊驱动，实时性相对差一些。
 - Control Win由winpcap软件收发包，不具有实时性。
-- Control RTE由专用驱动进行收发包，具有实时性。
+- Control RTE由专用网络驱动进行收发包，具有实时性。
 
 除了以上三种RTE外，还有特殊的系统比如STM32裸机、FPGA等有特殊方法实现，具体实现方式需要咨询官方。
 

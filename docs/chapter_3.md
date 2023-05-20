@@ -2,31 +2,36 @@
 
 ## 3.1 总线设备的添加与版本更新
 
-在codesys中，项目下添加的设备为第二个PLC，Device下添加的设备为总线。
+在codesys中，Device下添加的设备为总线。您也可以在 [官方help](https://help.codesys.com/webapp/f_device_editors;product=codesys){target=_blank} 上查到关于各设备的具体信息。
 
-您也可以在官方help上查到关于各设备的具体信息：[https://help.codesys.com/webapp/f_device_editors;product=codesys](https://help.codesys.com/webapp/f_device_editors;product=codesys){target=_blank}
+设备中有一些隐藏的参数，如EtherCAT的DCSyncInWindow参数。  
+在工具-选项，设备编辑器中勾选 **Show generic device configuration views** 以使能额外的设备配置选项卡：
 
-设备中有一些隐藏的参数，如EtherCAT的DCSyncInWindow参数，在工具-选项，设备编辑器中勾选如下选项以使能额外的设备配置选项卡：
+![](./images/3-1.png) 
  
 
 ## 3.2 EtherCAT的专用设置
 
-系统设置：
-
-- Linux SL/Raspberry pi，不需要特殊的设置。不过若Task Jitter较高可能造成DC同步报警，可修改DCInSyncWindow参数，一般建议改大到500us。
-
-- ControlWin，需要安装 [WinPcap](https://www.winpcap.org/install/bin/WinPcap_4_1_3.exe){target=_blank} 软件才可以运行EtherCAT，且其不具有实时性，不可以运行SoftMotion。
-
-- ControlRTE，需要确保网卡已经安装了专用驱动，您应该可以在设备管理器的网络适配器中看到网卡为CoDeSys Gigabit Network。若开DC和不开DC时发包数量不一致，则需要考虑重装RTE。
+NOTE: **系统设置**
+- Linux SL/Raspberry pi：不需要特殊的设置。不过若Task Jitter较高可能造成DC同步报警，可修改DCInSyncWindow参数，一般建议改大到500us。  
+- ControlWin：需要安装 [WinPcap](https://www.winpcap.org/install/bin/WinPcap_4_1_3.exe){target=_blank} 软件才可以运行EtherCAT，且其不具有实时性，不可以运行SoftMotion。  
+- ControlRTE：需要确保网卡已经安装了专用驱动，您应该可以在设备管理器的网络适配器中看到网卡为CoDeSys Gigabit Network。若开DC和不开DC时发包数量不一致，则需要考虑重装RTE。
 	
 
 项目设置：
 
-EtherCAT总线设备分为两个，EtherCAT Master和EtherCAT Master SoftMotion，它们除了FrameAtTaskStart参数外完全一致，带SoftMotion的默认为TRUE，关闭时每个PLC周期结束后才发EtherCAT帧。开启时在每个周期开始时发EtherCAT帧。开启后发送和接收的数据会有延迟，可能会导致超采样出问题，但能提供优异的实时性。
+EtherCAT总线设备分为两个，EtherCAT Master和EtherCAT Master SoftMotion，它们除了FrameAtTaskStart参数外完全一致，不带SoftMotion的为FALSE，每个PLC周期结束后才发EtherCAT帧。为TRUE时在每个周期开始时发EtherCAT帧，开启后发送和接收的数据会有延迟，可能会导致超采样出问题，但能提供优异的实时性。
 
 EtherCAT总线依赖设备描述文件，您需要先在工具-设备管理器中安装设备，安装后的设备即可插入在EtherCAT Master下。EtherCAT还有设备树的规范，若您插入的设备是耦合器（如倍福EK1100），则EK1100下挂的模块都需要在EK1100设备上添加。之后的设备在EtherCAT Master下添加。
 
+![](./images/3-2.png) 
+
 当您创建EtherCAT Master设备时，会自动创建EtherCAT_Task任务。该任务的周期由EtherCAT Master设备的Cycle Time参数指定，请勿手动修改。此外，需要选择EtherCAT网卡，并建议勾选自动重启从站。
+
+![](./images/3-3.png) 
+
+WARNING: **使用运动控制时的任务设置**
+使用运动控制（SoftMotion）时，运动控制相关程序实例（如MC_Power、MC_MoveAbsolute等）所在的程序块必须安排到EtherCAT_Task下执行。
 
 EtherCAT也支持扫描，添加EtherCAT Master并选择网卡后，登陆一次设备并下载PLC。无需启动，此时在EtherCAT Master设备上右键-扫描设备 即可进行扫描。
 
@@ -34,7 +39,7 @@ EtherCAT也支持扫描，添加EtherCAT Master并选择网卡后，登陆一次
 
 根据经验来说，CODESYS的Profinet需求大多数都跑在RT模式，通讯周期一般在1到32MS。由于EPOS的功能块只在博图软件里闭源，所以PTP带轴的实现也极少。大多数情况下，CODESYS的PN需求都是旧设备改造、总线测试或协议转接。
 
-作为PN主站时，操作和EtherCAT非常相似，添加PN主站、扫描或手动添加设备，登录即可。PN不需要专用硬件就可实现星形连接，每个设备都有独立的、在一个网段下的IP。
+作为PN主站时，操作和EtherCAT非常相似，添加PN主站、扫描或手动添加设备，登录即可。PN使用普通以太网交换机就可实现星形连接，每个设备都有独立的、在一个网段下的IP。
 
 
 PLC作为PN从站时，Windows系统中需要将防火墙打开，Linux系统中需要编辑配置文件，在最下面增加：
@@ -44,7 +49,8 @@ QDISC_BYPASS=1
 Linux.ProtocolFilter=3
 ```
 
-CAUTION: PLC作为PN从站时，建议固定地址而不是使用EnableSetIpAndMask。如果您需要可变的IP，确保由上位指定的IP不会与其它网口在同一网段下。
+CAUTION: **不建议使用EnableSetIpAndMask**
+PLC作为PN从站时，建议固定地址而不是使用 [EnableSetIpAndMask](https://help.codesys.com/webapp/_pnio_runtime_configuration_device;product=core_ProfinetIO_Configuration_Editor;version=4.1.0.0){target=_blank} ，即站点名称和IP都在CODESYS项目中指定。如果您需要可变的IP，请确保由上位指定的IP不会与其它网口在同一网段下，并且 [不要用PN从站所使用的网口登录到PLC](https://help.codesys.com/webapp/_pnio_firewall_codesys_communication;product=core_ProfinetIO_Configuration_Editor;version=4.1.0.0){target=_blank} 。
 
 ## 3.4 Modbus RTU的专用设置
 
@@ -62,17 +68,17 @@ Linux.Devicefile.2=/dev/ttyUSB0
 Modbus RTU的设备是Modbus下Modbus Serial Port下的Modbus COM，基于COM端口的通讯。
 
 
-
 ## 3.5 Modbus TCP的专用设置
 
 ModbusTCPSlave Parameters中有个参数Unit-ID，可以理解为RTU的从站ID。标准协议中已移除此校验，默认置为0xFF。但某些旧设备仍然保留该校验，可手动改为0x01或设备特定的ID。
 	
 除了标准的Modbus TCP slave设备外，还可以在其下添加Modbus Slave, COM Port，即TCP转RTU方案，可以用协议转换器或某些带RTU扩展的TCP模块。
 
-
 ## 3.6 Ethernet/IP的专用设置
 
-EIP需要注意连接路径，有些设备连接路径不一定是设备描述文件中的。连接路径无法扫描，必须手动输入，不能有任何错误。EIP也可以不使用设备描述文件，而是通过标准设备添加自定义连接路径来连接。
+EIP需要注意连接路径，有些设备连接路径不一定是设备描述文件中的。连接路径无法扫描，必须手动输入，不能有任何错误。
+
+EIP也可以不使用设备描述文件，而是通过标准设备添加自定义连接路径来连接。
 
 ## 3.7 Canopen的专用设置
 
@@ -102,6 +108,88 @@ TCP和UDP都是使用NBS库实现，在CODESYS中分为两个库，一个是官�
 
 TCP、UDP的通讯实现都是纯代码的，这意味着不需要额外的授权，同样的代码可以在汇川、施耐德等基于CODESYS的PLC上通用。
 
-CAUTION: 官方库和CAA库的命名空间（Namespace）都是NBS，所以不建议在一个项目中同时使用两个库。如果一定要使用，需要手动修改命名空间。
+CAUTION: **命名空间**
+官方库和CAA库的命名空间（Namespace）都是NBS，所以不建议在一个项目中同时使用两个库。如果一定要使用，需要手动修改命名空间。
+
+这里是一个基础的TCP服务器的实现代码：
+```iecst
+VAR
+	ip:NBS.IP_ADDR:=(sAddr:='0.0.0.0');//作为服务器时不需要设置IP，用0.0.0.0即可
+	port:UINT:=55555;//服务器端口
+	Server:NBS.TCP_Server;
+	Connection:NBS.TCP_Connection;
+	Write:NBS.TCP_Write;
+	Read:NBS.TCP_Read;
+	ton_LostConnect:TON;
+	sReadData:STRING;
+	xWriteEnable: BOOL;
+	sWriteData:STRING;
+END_VAR
+
+
+//Server
+	Server(xEnable:=NOT ton_LostConnect.Q , ipAddr:=ip ,uiPort:=port );
+//Connect
+	Connection(xEnable:=Server.xBusy AND NOT ton_LostConnect.Q ,hServer:=Server.hServer );
+//Lost Connect
+	IF NOT Connection.xActive THEN
+		IF ton_LostConnect.Q THEN
+			ton_LostConnect(IN:=FALSE);
+		END_IF
+		ton_LostConnect(IN:=TRUE,PT:=T#2000MS);
+	END_IF
+//Read
+	Read(xEnable:=Connection.xActive AND NOT Read.xError ,hConnection:=Connection.hConnection , szSize:=SIZEOF(sReadData) , pData:=ADR(sReadData));
+//Flush String
+	IF Read.szCount <> 0 THEN
+		sReadData:=LEFT(sReadData,ULINT_TO_INT(Read.szCount));
+	END_IF
+//Write
+	Write(xExecute:=xWriteEnable , udiTimeOut:=500 , hConnection:=Connection.hConnection , szSize:=INT_TO_UDINT(LEN(sWriteData)) , pData:=ADR(sWriteData));
+```
+
+这是一个基础的TCP客户端的实现代码：
+```iecst
+VAR
+    client:NBS.TCP_Client;
+    ip:NBS.IP_ADDR:=(sAddr:='192.168.2.100');//这里改为目标服务器的IP地址
+	port:UINT:=1000;//改为目标端口
+    read:NBS.TCP_Read;
+    write:NBS.TCP_Write;
+    strRead:STRING(99);
+    strWrite:STRING(99);
+    xWriteEnable: BOOL;
+    tonDelay:TON;
+    tCyclicDelay:TIME:=T#10MS;
+    xStartCyclic:BOOL:=TRUE;
+    ton_LostConnect:TON;
+END_VAR
+
+
+//Client
+	client(xEnable:=NOT ton_LostConnect.Q ,ipAddr:=ip ,uiPort:=port);
+//Lost Connect
+	IF NOT client.xActive OR write.xError THEN
+		IF ton_LostConnect.Q THEN
+			ton_LostConnect(IN:=FALSE);
+		END_IF
+		ton_LostConnect(IN:=TRUE,PT:=T#2000MS);
+	END_IF
+//Read  
+	read(xEnable:=client.xActive ,hConnection:=client.hConnection , szSize:=SIZEOF(strRead) , pData:=ADR(strRead));
+	IF read.szCount > 0 THEN
+		strRead:=LEFT(strRead, ULINT_TO_INT(read.szCount));//only keep actual data
+	END_IF
+//Write
+	write(xExecute:=xWriteEnable , hConnection:=client.hConnection , szSize:=LEN(strWrite) , pData:=ADR(strWrite));
+	tonDelay(IN:=xStartCyclic,PT:=tCyclicDelay);
+	xWriteEnable:=FALSE;
+	IF tonDelay.Q THEN
+		tonDelay(IN:=FALSE);
+		xWriteEnable:=TRUE;
+	END_IF
+```
+
+
 
 

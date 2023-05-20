@@ -2,39 +2,73 @@
 
 ## 4.1 Visu结构组成
 
-Visuallization字面意思即可视化，可以理解为内置的组态屏。最常用的是WebVisu，可以通过浏览器本地或局域网内访问。本地用chromium的kiosk模式打开即和TargetVisu效果一致，且配置更自由。故现在很少会用TargetVisu。
+Visuallization字面意思即可视化，可以理解为内置的组态屏。最常用的是WebVisu，可以通过浏览器本地访问或局域网内另一台PC远程访问。本地用chromium的kiosk模式打开即和TargetVisu效果一致，且配置更自由。故现在很少会用TargetVisu。
 
-在做Visu前，建议各位读者先有一个设计思路。一般情况下，我们推荐元素不要用太多的种类，颜色可以丰富一些并用浅色，字体应用黑体或仿宋，背景可以用浅色纯色或白色90%透明度叠加的背景图片。通常情况下，我们不建议使用官方的指示灯、切花开关、码表等元素，因为图标风格不一致会有设计上的割裂感。按钮、指示灯、文字和框架都可以用矩形来做。Style选择Default或Flat Style。一般不建议在一个界面中挤满元素，而是通过分页、分框架的形式构建界面。
+NOTE: **浏览器做visu的设置**
+推荐使用 [ungoogled-chromium](https://ungoogled-software.github.io/ungoogled-chromium-binaries/){target=_blank} 作为Chrome的离线、免安装、去更新化方案。创建快捷方式并编辑属性中的目标栏。  
+若需要窗口模式，使用`C:\ungoogled-chromium\chrome.exe --app=http://127.0.0.1:8080 --window-size=1040,808`  
+若需要全屏模式，使用`C:\ungoogled-chromium\chrome.exe  --kiosk http://127.0.0.1:8080`  
 
-我们可以在Application下添加visu，添加第一个visu时会自动添加Visulization Manager。添加visu时会有提示是否勾选VisuSymbols，这是系统内置的一些SVG图片库，可根据需求勾选。
+
+在做Visu前，建议各位读者先有一个设计思路。一般情况下，我们推荐元素不要用太多的种类，颜色可以丰富一些并用浅色，字体应用黑体或仿宋，背景可以用浅色纯色或白色90%透明度叠加的背景图片。通常情况下，我们不建议使用官方的指示灯、切换开关、码表等元素，因为图标风格不一致会有设计上的割裂感。按钮、指示灯、文字和框架都可以用矩形来做。Style选择Default或Flat Style。一般不建议在一个界面中挤满元素，而是通过分页、分框架的形式构建界面。
+
+我们可以在Application下添加Visualization页面，添加第一个visu时会自动添加Visulization Manager。添加visu时会有提示是否勾选VisuSymbols，这是系统内置的一些SVG图片库，可根据需求勾选。默认情况下visu不支持中文，下载后会出现乱码，可在Visualization Manager中勾选Use unicodestrings即可。
+
+![](./images/4-1.png) 
 
 添加的Visu默认是一个Visualization，可以理解为一个页面。如果需要做对话框可以改变visu属性为dialog。在属性中也可以设置visu的页面大小，该大小为画布大小，还会在管理器里根据缩放选项缩放。
 
-界面右侧会有Visualization Toolbox，用的最多的是Basic中的矩形、圆形、直线和Frame。
+![](./images/4-2.png) ![](./images/4-3.png)
 
-在制作背景、图片按钮或选框时，我们还要在项目中插入ImagePool和TextPool，它们用于给图片或文本分配ID，即可在Visu中静态或动态引用。
+visu编辑界面右侧会有Visualization Toolbox（没有的话可以在View中选出来），将元素拖放到画布上即可添加。用的最多的是Basic中的矩形、图片和框架。在制作背景、图片按钮或选框时，我们还要在项目中插入ImagePool和TextPool，它们用于给图片或文本分配ID，即可在Visu中静态或动态引用。
 	
 ## 4.2 基础元素
 
-直线：直线是最常用的用于分隔界面小块的元素，也有少部分作为旋转指针实现。当作为分割线时，建议在Apperance中设置Line width在2至4之间，线形可以根据需要选择，颜色建议浅灰色或深灰色。横竖的对齐需要手动编辑Position下的Points坐标实现。
-
-矩形：矩形（或圆角矩形）是最常用的元素，它们既可以作为指示灯，又可以作为按钮，还可以显示文字、信息，亦可以在框架中作为下拉菜单选框使用。
+矩形：矩形（或圆角矩形）是最常用的元素，它们既可以作为指示灯，又可以作为按钮，还可以显示文字、信息，亦可以作为分隔线和下拉菜单选框使用。
 
 当作为双色切换的指示灯时，编辑Colors下的Normal state和Alarm state下的Fill color，建议一个改为LightGray，另一个改为LightGreen。并将Apperance下的Line style改为Invisible（或Hollow）。再在Color variables的Toggle color关联变量即可。
 
-当作为按钮时，可以在Texts中输入文字作为按钮标识，并在Input configuration中关联动作。若需要带指示的按钮，可重复指示灯操作。
+![](./images/4-5.gif)
 
-当作为文本框时，只需要写入文字并将边框隐藏即可，可在Text properties中设置文本属性和对齐方式。
+当作为按钮时，可将边框改大以与文本区分，在Texts中输入文字作为按钮标识，并在Input configuration中关联动作。默认指示状态关联Tap/Toggle，可在Color variables的Toggle color中取消关联。
 
-除了这两种基础元素外，常用的还有Image（插入图片），Frame（框架），Label（文本），Button（按钮），Group Box（组合框），Slider（滑动按钮），CheckBox（选择框）等。
+![](./images/4-6.gif)
+
+当作为数值显示时，根据文本内容可以用%s（文字）、%d（整数）、%.2f（小数）并在Text variable中关联变量，即可作为变量显示框。此外，还可以关联Text list并使用Dynamic texts制作中文动态指示。
+
+当作为数值输入时，先创建一个数值显示，再在OnMouseClick中添加Write Variable即可，程序中可对输入内容二次校验及限制。
+
+除了矩形外，常用的还有Image（图片），Frame（框架），Group Box（组合框），Slider（滑动按钮），Line（分割线）等。
+
+TIP: **背景图片**
+背景图片可以在visu空白处右键-Background中选择，这样选出来的背景图片不可以被鼠标选中，避免误操作。在用图片做背景时，建议图片尺寸和visu尺寸一致以避免缩放。
+
 
 ## 4.3 界面框架
 
+我们可以用多个相同尺寸visu切换的方式来架构应用，这适用于较少的页面。添加按钮后，在OnMouseClick中选择Change Shown Visualization即可。
+
+![](./images/4-7.gif)
+
+在制作十多个页面以上的visu时，按钮切换的方式就会显得复杂了，这时候我们可以用框架（Frame）甚至是多个框架组合来做复杂的界面。作为frame时，一般建议预先规划frame尺寸，并在各个frame的属性中使用特定尺寸的画布大小。需要切换Frame时，我们可以创建一个变量关联到Switch frame variable中，然后就可以在程序里控制展示的Frame。具体到按钮上，可以选Execute ST-Code，然后将变量增加、减小或设置固定值即可。
+
+![](./images/4-8.png) ![](./images/4-9.png)
+
 ## 4.4 运动控制简介
 
-运动控制（Softmotion）是codesys的一大特色，softmotion通过库中的plc逻辑计算每个周期轴应当处在的位置，并通过总线发送达到实时控制的目的，驱动器工作在CSP模式下。除了softmotion外，codesys还支持softmotion light，plc发送非循环的指令控制，驱动器工作在PP、PV等模式下。Softmotion light还可以通过OpenSML或自己写逻辑实现，不需要授权。
+运动控制（SoftMotion）是CODESYS的一大特色，SoftMotion通过库中的功能块计算每个周期轴应当处在的位置，并通过总线发送给驱动器以达到实时控制的目的，驱动器工作在同步位置模式（CSP）下。除了标准的SoftMotion外，CODESYS还支持SoftMotion Light，发送非实时的指令控制，驱动器工作在PP、PV等模式下。SoftMotion Light还可以通过OpenSML库或自己写逻辑实现，不需要授权，故实际应用较少。
 
-运动控制的授权会在各个授权中标明是否含有，例如树莓派的标准授权中不含运动控制，若需要使用轴或轴组功能则需要额外购买授权。但其可以通过自定义轴结构体并手动映射变量规避，需要一定的编程能力。
+运动控制的授权会在各个授权中标明是否含有，例如树莓派的标准授权中不含运动控制，若需要使用轴或轴组功能则需要额外购买授权。但其可以通过自定义轴结构体并手动映射变量规避，需要一定的编程能力。详细请看[这里](#axis-ref)。 
+
+通常情况下，我们谈论的SoftMotion都是控制EtherCAT总线伺服。也有少量伺服跑在CanOpen模式，它们的通信模式是一致的，操作类似。我们先添加一个EtherCAT_Master_SoftMotion总线设备，在其下添加 SGD7S-xxxxA0x EtherCAT(CoE) SERVOPACK Rev8.06_SM（安川EtherCAT总线伺服），即自动加上了一个轴对象。此外，还有一部分驱动器设备名后不带_SM的不会自动加轴对象，要手动在设备上右键-添加SoftMotion CiA402 Axis，例如汇川SV630N伺服。但一般来说，自动加轴和手动加轴使用上是一致的。
+
+![](./images/4-10.png)
+
+TIP: **Online Config模式**
+Online Config模式适用于教学或轴的试运行，只需要添加完设备，物理接线连接好即可。通过点击 ![Online Config](./images/4-11.png) 按钮，会自动编译一套带有基础运动控制功能和VISU的程序下载并运行。完成后，轴对象中的Commissioning页可用于手动上使能、移动等基础操作，可用于调试和诊断。
+
+![](./images/4-12.png)
+
 
 ## 4.5 轴与轴组
 
@@ -189,3 +223,37 @@ IF xReset THEN
 	diTemp:=0;
 END_IF
 ```
+----
+
+### 自定义AXIS REF规避授权
+
+SoftMotion包含很多内容，主要有MC_xxx功能块用来控制轴；轴设备用来修改减速比，限位等参数；visu用来online config以及通用的界面展示。SoftMotion的授权是基于轴这个设备的，即授权检测在设备上而不是在功能块中。这样，我们可以创建一个变量，类型为AXIS_REF_SM3，对于库中的程序来说是一个实轴对象。要让这个对象使能并正常运行，我们需要做一些操作，如下程序。
+
+```iecst
+VAR
+	Axis1:AXIS_REF_SM3;
+END_VAR
+
+Axis1.bCommunication:=TRUE;
+Axis1.bRegulatorRealState:=TRUE;
+Axis1.bDriveStartRealState:=TRUE;
+IF Axis1.nAxisState=0 THEN
+	Axis1.nAxisState:=3;
+END_IF
+Axis1.eRampType:=2;//速度曲线类型
+Axis1.fSavePosition:=Axis1.fSetPosition;
+Axis1.fCycleTimeSpent:=0;
+Axis1.fTaskCycle:=0.001;//任务周期
+```
+
+之后，我们就可以用MC_Power，MC_MoveAbsolute等功能块的实例控制轴运动，此时相当于是创建了一个不需授权的虚轴。虚轴要和实轴连起来还需要做一些补丁，可以参考OpenSML，对驱动器上使能并工作在CSP模式，初始化位置等操作。需要注意的是，和标准的实轴对比，有以下几个缺点：
+
+1. 不好设定减速比，需要创建一个轴对象，设置好减速比后在轴的Parameters页找到实际的几个变量值。
+2. 需要自己写报警，没有位置反馈时检测不到跟随误差。
+3. 特殊操作如回参、力矩模式可能会有问题。
+
+----
+
+
+
+
