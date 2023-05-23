@@ -117,7 +117,12 @@
 <p>在codesys中，Device下添加的设备为总线。您也可以在 <a href="https://help.codesys.com/webapp/f_device_editors;product=codesys" target="_blank">官方help</a> 上查到关于各设备的具体信息。</p>
 <p>设备中有一些隐藏的参数，如EtherCAT的DCSyncInWindow参数。<br />
 在工具-选项，设备编辑器中勾选 <strong>Show generic device configuration views</strong> 以使能额外的设备配置选项卡：</p>
-<p><img alt="" src="../images/3-1.png" /> </p>
+<p><img alt="" src="../images/3-1.png" /></p>
+<div class="admonition tip">
+<p class="admonition-title">通讯自动优化</p>
+<p>
+默认情况下不使用的I/O地址不会更新变量实时值，可在I/O Mapping页右下角的Always update variables改为Enable 2即可。</p>
+</div>
 <h2 id="32-ethercat">3.2 EtherCAT的专用设置</h2>
 <div class="admonition note">
 <p class="admonition-title">系统设置</p>
@@ -126,7 +131,6 @@
 - ControlWin：需要安装 <a href="https://www.winpcap.org/install/bin/WinPcap_4_1_3.exe" target="_blank">WinPcap</a> 软件才可以运行EtherCAT，且其不具有实时性，不可以运行SoftMotion。<br />
 - ControlRTE：需要确保网卡已经安装了专用驱动，您应该可以在设备管理器的网络适配器中看到网卡为CoDeSys Gigabit Network。若开DC和不开DC时发包数量不一致，则需要考虑重装RTE。</p>
 </div>
-<p>项目设置：</p>
 <p>EtherCAT总线设备分为两个，EtherCAT Master和EtherCAT Master SoftMotion，它们除了FrameAtTaskStart参数外完全一致，不带SoftMotion的为FALSE，每个PLC周期结束后才发EtherCAT帧。为TRUE时在每个周期开始时发EtherCAT帧，开启后发送和接收的数据会有延迟，可能会导致超采样出问题，但能提供优异的实时性。</p>
 <p>EtherCAT总线依赖设备描述文件，您需要先在工具-设备管理器中安装设备，安装后的设备即可插入在EtherCAT Master下。EtherCAT还有设备树的规范，若您插入的设备是耦合器（如倍福EK1100），则EK1100下挂的模块都需要在EK1100设备上添加。之后的设备在EtherCAT Master下添加。</p>
 <p><img alt="" src="../images/3-2.png" /> </p>
@@ -137,11 +141,17 @@
 <p>
 使用运动控制（SoftMotion）时，运动控制相关程序实例（如MC_Power、MC_MoveAbsolute等）所在的程序块必须安排到EtherCAT_Task下执行。</p>
 </div>
-<p>EtherCAT也支持扫描，添加EtherCAT Master并选择网卡后，登陆一次设备并下载PLC。无需启动，此时在EtherCAT Master设备上右键-扫描设备 即可进行扫描。</p>
+<p>EtherCAT也支持扫描，添加EtherCAT Master并选择网卡后，登陆一次设备并下载PLC。无需启动，此时在EtherCAT Master设备上右键-扫描设备 即可进行扫描。添加完EtherCAT模块后，可在对应模块的I/O Mapping页中关联变量。某些时候我们还会用到Startup Parameters，例如汇川GL20系列的模拟量模块通过设置transform mode改变电压/电流模式。</p>
+<div class="admonition tip">
+<p class="admonition-title">设备关联与地址关联</p>
+<p>
+在使用TIA时我们通常使用地址关联，直接将变量关联到I、Q地址上。但在CODESYS中，一般情况下我们推荐在I/O Mapping中关联变量，这种方式不受设备地址影响，不容易出错。</p>
+</div>
 <h2 id="33-profinet">3.3 Profinet的专用设置</h2>
 <p>根据经验来说，CODESYS的Profinet需求大多数都跑在RT模式，通讯周期一般在1到32MS。由于EPOS的功能块只在博图软件里闭源，所以PTP带轴的实现也极少。大多数情况下，CODESYS的PN需求都是旧设备改造、总线测试或协议转接。</p>
-<p>作为PN主站时，操作和EtherCAT非常相似，添加PN主站、扫描或手动添加设备，登录即可。PN使用普通以太网交换机就可实现星形连接，每个设备都有独立的、在一个网段下的IP。</p>
-<p>PLC作为PN从站时，Windows系统中需要将防火墙打开，Linux系统中需要编辑配置文件，在最下面增加：</p>
+<p>作为PN主站时，操作和EtherCAT非常相似，添加PN主站、扫描或手动添加设备，登录即可。如需分配地址可在扫描时设定。PN使用普通以太网交换机就可实现星形连接，每个设备都有独立的、在一个网段下的IP。与EtherCAT不同的是，一般来说PN设备下插入的为报文Telegram（或叫模块Module），仍然是在这个设备上。</p>
+<p><img alt="" src="../images/3-4.png" /> </p>
+<p>无论作为PN主站还是PN从站，都是在Ethernet设备下加PN主/从，而不是用CIFX卡。当PLC作为PN从站时，Windows系统中需要将防火墙打开，Linux系统中需要编辑配置文件，在最下面增加：</p>
 <pre><code>[SysEthernet]
 QDISC_BYPASS=1
 Linux.ProtocolFilter=3
@@ -159,13 +169,14 @@ Linux.Devicefile.2=/dev/ttyUSB0
 </code></pre>
 <p>也可以直接归纳到ttyUSB中自动排序，例如：<code>Linux.Devicefile=/dev/ttyUSB</code>，这会自动把ttyUSB0映射到COM1，以此类推。</p>
 <p>在Windows系统中，请在设备管理器中查看具体的COM端口。</p>
-<p>Modbus RTU的设备是Modbus下Modbus Serial Port下的Modbus COM，基于COM端口的通讯。</p>
+<p>Modbus没有设备描述文件，使用统一的Modbus Slave设备，根据对应的文档编辑Modbus Slave Channel来指定通讯内容和地址。通常使用的功能码为3和16，请注意通讯地址是10进制还是16进制。</p>
+<p><img alt="" src="../images/3-5.png" /> </p>
 <h2 id="35-modbus-tcp">3.5 Modbus TCP的专用设置</h2>
 <p>ModbusTCPSlave Parameters中有个参数Unit-ID，可以理解为RTU的从站ID。标准协议中已移除此校验，默认置为0xFF。但某些旧设备仍然保留该校验，可手动改为0x01或设备特定的ID。</p>
-<p>除了标准的Modbus TCP slave设备外，还可以在其下添加Modbus Slave, COM Port，即TCP转RTU方案，可以用协议转换器或某些带RTU扩展的TCP模块。</p>
+<p>除了标准的Modbus TCP slave设备外，还可以在其下添加Modbus Slave, COM Port，即TCP转RTU方案，可以用协议转换器或某些带RTU扩展的TCP模块。但部分带协议转换的转换器无需设置，相当于直接把TCP报文转为了RTU报文，这时Unit-ID是需要根据实际设备地址修改的。</p>
 <h2 id="36-ethernetip">3.6 Ethernet/IP的专用设置</h2>
 <p>EIP需要注意连接路径，有些设备连接路径不一定是设备描述文件中的。连接路径无法扫描，必须手动输入，不能有任何错误。</p>
-<p>EIP也可以不使用设备描述文件，而是通过标准设备添加自定义连接路径来连接。</p>
+<p>EIP也可以不使用设备描述文件，而是通过标准设备（Generic EtherNet/IP device）添加自定义连接路径来连接。大多数情况下，非标通讯只有OT和TO，只修改Instance ID和IO大小即可，其余选项不需要配置。</p>
 <h2 id="37-canopen">3.7 Canopen的专用设置</h2>
 <p>一般来说，Linux上的Canopen会通过SocketCAN，使用CANable或MCP2515实现。而Windows上一般使用PCAN USB转换器实现。这两种都只支持标准CAN协议，最大波特率1M。</p>
 <p>在Linux（Raspberry Pi）中，需要做如下修改：</p>
