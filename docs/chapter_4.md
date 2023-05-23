@@ -30,15 +30,15 @@ visu编辑界面右侧会有Visualization Toolbox（没有的话可以在View中
 
 ![](./images/4-5.gif)
 
-当作为按钮时，可将边框改大以与文本区分，在Texts中输入文字作为按钮标识，并在Input configuration中关联动作。默认指示状态关联Tap/Toggle，可在Color variables的Toggle color中取消关联。
+当作为按钮时，可将边框改大以与文本区分，在Texts中输入文字作为按钮标识，并在Input configuration中关联动作。默认指示状态关联Tap/Toggle，可在Color variables的Toggle color中取消关联。一般来说，特殊按钮使用矩形或图片来做，标准按钮使用Button来做。
 
 ![](./images/4-6.gif)
 
-当作为数值显示时，根据文本内容可以用%s（文字）、%d（整数）、%.2f（小数）并在Text variable中关联变量，即可作为变量显示框。此外，还可以关联Text list并使用Dynamic texts制作中文动态指示。
+当作为数值显示时，根据文本内容可以用%s（文字）、%d（整数）、%.2f（小数）并在Text variable中关联变量，即可作为变量显示框。此外，还可以关联Text list并使用Dynamic texts制作中文动态指示。关于文本占位符可以参考 [Placeholders with Format Definition in the Output Text](https://help.codesys.com/webapp/_visu_placeholder_with_formatting_sequence_in_a_string;product=core_visualization){target=_blank} 。
 
 当作为数值输入时，先创建一个数值显示，再在OnMouseClick中添加Write Variable即可，程序中可对输入内容二次校验及限制。
 
-除了矩形外，常用的还有Image（图片），Frame（框架），Group Box（组合框），Slider（滑动按钮），Line（分割线）等。
+除了矩形外，常用的还有Button（按钮），Image（图片），Frame（框架），Group Box（组合框），Slider（滑动按钮），Line（分割线）等。
 
 TIP: **背景图片**
 背景图片可以在visu空白处右键-Background中选择，这样选出来的背景图片不可以被鼠标选中，避免误操作。在用图片做背景时，建议图片尺寸和visu尺寸一致以避免缩放。
@@ -69,14 +69,28 @@ Online Config模式适用于教学或轴的试运行，只需要添加完设备�
 
 ![](./images/4-12.png)
 
+调试好基础运动后，我们就可以在程序中创建MC_Power、MC_MoveAbsolute等功能块的实例，并将程序放在EtherCAT Task任务下，即可控制轴的运动。
 
-## 4.5 轴与轴组
+TIP: **输入助手**
+在空白处右键-输入助手（Input Assistant）中的实例调用（Instance Calls）选择需要插入的功能块实例，即可自动插入所有功能块的输入输出变量。
 
-## 4.6 凸轮与插补
+## 4.5 轴、凸轮与插补
 
-## 4.7 配方和文件功能
+在上一小节中我们插入了 *SM_Drive_ETC_Yaskawa_SGD_Sigma7_1* 这个轴对象，我们可以对这个轴做上电、运动控制，运动控制主要分为点到点或匀速的PTP控制、凸轮和插补三大类。
 
-## 4.8 日期、大小端、特殊功能
+1. PTP控制：使用MC_MoveAbsolute、MC_MoveVelocity等功能块直接控制轴运动，例如旋转工作台、传送带等。
+2. 凸轮控制：使用MC_CamIn参考CAM表控制，使用MC_GearIn进行按比例的耦合传动控制，适用于凸轮、挺杆、物料传动等。
+3. 插补控制：使用SM3_CNC库中的功能块，读取NC文件并按照G代码运行，可用于简单的双、三、四轴插补数控系统，需要CNC授权。
+
+## 4.6 配方和报警
+
+配方（Recipe Manager）常用于存储多组可变参数表，相当于自定义一个结构体存在保持变量表里。但与保持变量不同的是，配方可以由程序控制加载、保存，并可以保存成多个文件，可以随意加载并修改。多用于参数较多且易变的设备中。一个项目中只能有一个配方管理器，但可以有多个配方。配方中的变量必须已在程序中被定义，一般会定义一个结构体并在保持变量中声明。
+
+报警（Alarm Configuration）是大多数项目用不到的功能。在一些中大型或有记录需求的项目中很有用。通常勾选Archiving，并创建AlarmGroup后，可在AlarmStorage中定义保存路径，报警将会自动保存成SQLite文件，可用DB Browser for SQLite打开查看，但更常用的是直接登陆上设备，并在AlarmStorage上右键-CSV Export of Alarm Storage，后者会自动转换时间格式并添加Message信息。
+
+Data Sources Manager可用于多个PLC的报警归纳，但一般较少使用。我们更推荐使用NVL（Network Variable List）实现变量的传递，可控周期和更好的扩展性。
+
+## 4.7 日期、大小端、特殊功能
 
 ### 日期
 
