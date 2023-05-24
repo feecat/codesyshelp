@@ -1,6 +1,6 @@
 # 0 引言
 
-《CODESYS进阶与提升》
+《CODESYS应用指南》
 
 本书（开源电子书）编写目的是基础教材书籍的增补，集合了数十位不同行业工程师实际遇到的问题，同时将一些偏门问题统一归纳，方便开发人员查询。
 
@@ -8,7 +8,7 @@
 
 如有更多问题建议在 [官方Forge](https://forge.codesys.com/forge/talk/){target=_blank} 上提问或咨询作者。
 
-黄承，MTg2MjYxODg3ODQ=，[github.com/feecat/codesyshelp](https://github.com/feecat/codesyshelp){target=_blank}
+黄承，omeo@foxmail.com，[github.com/feecat/codesyshelp](https://github.com/feecat/codesyshelp){target=_blank}
 
 2023年第一版
 
