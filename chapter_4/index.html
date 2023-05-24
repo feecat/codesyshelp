@@ -82,7 +82,9 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#46">4.6 配方和报警</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#47">4.7 日期、大小端、特殊功能</a>
+    <li class="toctree-l2"><a class="reference internal" href="#47">4.7 全局变量、保持变量和网络变量</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#48">4.8 日期、大小端、特殊功能</a>
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#_1">日期</a>
     </li>
@@ -252,7 +254,17 @@ mcs(Axis:=AxisT,Execute:=NOT biEmergencyStop AND mcp.Status,Deceleration:=rAcc,J
 <p>配方（Recipe Manager）常用于存储多组可变参数表，相当于自定义一个结构体存在保持变量表里。但与保持变量不同的是，配方可以由程序控制加载、保存，并可以保存成多个文件，可以随意加载并修改。多用于参数较多且易变的设备中。一个项目中只能有一个配方管理器，但可以有多个配方。配方中的变量必须已在程序中被定义，一般会定义一个结构体并在保持变量中声明。</p>
 <p>报警（Alarm Configuration）是大多数项目用不到的功能。在一些中大型或有记录需求的项目中很有用。通常勾选Archiving，并创建AlarmGroup后，可在AlarmStorage中定义保存路径，报警将会自动保存成SQLite文件，可用DB Browser for SQLite打开查看，但更常用的是直接登陆上设备，并在AlarmStorage上右键-CSV Export of Alarm Storage，后者会自动转换时间格式并添加Message信息。</p>
 <p>Data Sources Manager可用于多个PLC的报警归纳，但一般较少使用。我们更推荐使用NVL（Network Variable List）实现变量的传递，可控周期和更好的扩展性。</p>
-<h2 id="47">4.7 日期、大小端、特殊功能</h2>
+<h2 id="47">4.7 全局变量、保持变量和网络变量</h2>
+<div class="admonition tip">
+<p class="admonition-title">编译修饰符</p>
+<p>
+创建任意变量表时默认添加<code>{attribute 'qualified_only'}</code>修饰，该修饰会导致引用变量时要带着变量表名称，例如 <strong>GVL.iTest</strong> 或 <strong>PersistentVars.iTest2</strong> 。可根据需求移除，移除后不需要带变量表名称即可引用。</p>
+</div>
+<p>POU中VAR和END_VAR之间定义的变量为局部变量，可以在POU中读写，外部只可以读取不可以写入。如有少量写入需求，可以定义在VAR_INPUT、VAR_IN_OUT下。多数时候公共变量我们会创建一个全局变量表GVL（Global Variable List），可以从任意POU、FB中读写访问。</p>
+<p>通过创建保持变量表（Persistent Variables），变量可以在每次关机时自动保存，并在下次开机时自动加载。CODESYS仅支持一个保持变量表，您也可以在POU里定义VAR PERSISTENT（注意这里两个单词间没有下划线），也可以自动保持变量。但该方式最终编译仍然是链接到PersistentVars中，故一般推荐只在PersistentVars中定义保持变量。</p>
+<p>保持变量还可以通过顶层模块（View-Module打开模块列表，添加库选择AC_Persistence，添加顶层模块PersistenceManager）来自定义保存路径、保存时间和保持变量的转入转出。但由于复杂度太高，一般采用配方Recipe或自己写CSV文件读写替代。</p>
+<p>网络变量NVL（Network Variable List）适用于一个网段下两台或多台设备的通讯，由CODESYS实现底层协议，我们定义一个发送者和一个接收者即可。如果需要双向通讯，则需要在两个设备下各自创建发送和接收，多设备可以组环网。一般来说，我们会在一个项目中创建多个设备，并在POU页定义公共结构体，再在网络变量中引用结构体，即可实现环网、自适应的网络变量。相对于Modbus TCP或其他基于TCP的总线来说，网络变量可以近乎无限制的创建任意变量表，没有大小端和地址问题，比较方便。</p>
+<h2 id="48">4.8 日期、大小端、特殊功能</h2>
 <h3 id="_1">日期</h3>
 <p>Codesys默认是从系统读取时间，系统依赖于RTC时钟。由于各厂家RTC时钟设置有差异，我们不去讨论设置时间，而是看看如何读取时间。需要在库管理器中添加<code>SysTime</code>和<code>SysTypes2 Interfaces</code>库。</p>
 <pre><code class="language-iecst">VAR
@@ -383,6 +395,8 @@ END_IF
 END_VAR
 
 Axis1.bCommunication:=TRUE;
+Axis1.bRegulatorOn:=TRUE;
+Axis1.bDriveStart:=TRUE;
 Axis1.bRegulatorRealState:=TRUE;
 Axis1.bDriveStartRealState:=TRUE;
 IF Axis1.nAxisState=0 THEN
@@ -393,9 +407,9 @@ Axis1.fSavePosition:=Axis1.fSetPosition;
 Axis1.fCycleTimeSpent:=0;
 Axis1.fTaskCycle:=0.001;//任务周期
 </code></pre>
-<p>之后，我们就可以用MC_Power，MC_MoveAbsolute等功能块的实例控制轴运动，此时相当于是创建了一个不需授权的虚轴。虚轴要和实轴连起来还需要做一些补丁，可以参考OpenSML，对驱动器上使能并工作在CSP模式，初始化位置等操作。需要注意的是，和标准的实轴对比，有以下几个缺点：</p>
+<p>之后，我们就可以用MC_MoveAbsolute等功能块的实例控制轴运动，此时相当于是创建了一个不需授权的虚轴。虚轴要和实轴连起来还需要做一些补丁，可以参考OpenSML，对驱动器上使能并工作在CSP模式，初始化位置等操作。需要注意的是，和标准的实轴对比，有以下几个缺点：</p>
 <ol>
-<li>不好设定减速比，需要创建一个轴对象，设置好减速比后在轴的Parameters页找到实际的几个变量值。</li>
+<li>无法设定减速比，需要自己换算并应用到TargetPosition上。</li>
 <li>需要自己写报警，没有位置反馈时检测不到跟随误差。</li>
 <li>特殊操作如回参、力矩模式可能会有问题。</li>
 </ol>
