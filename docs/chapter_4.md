@@ -159,7 +159,21 @@ CODESYS声称支持6轴插补，但大多实际应用只用到2轴、3轴插补�
 
 Data Sources Manager可用于多个PLC的报警归纳，但一般较少使用。我们更推荐使用NVL（Network Variable List）实现变量的传递，可控周期和更好的扩展性。
 
-## 4.7 日期、大小端、特殊功能
+## 4.7 全局变量、保持变量和网络变量
+
+TIP: **编译修饰符**
+创建任意变量表时默认添加`{attribute 'qualified_only'}`修饰，该修饰会导致引用变量时要带着变量表名称，例如 **GVL.iTest** 或 **PersistentVars.iTest2** 。可根据需求移除，移除后不需要带变量表名称即可引用。
+
+POU中VAR和END_VAR之间定义的变量为局部变量，可以在POU中读写，外部只可以读取不可以写入。如有少量写入需求，可以定义在VAR_INPUT、VAR_IN_OUT下。多数时候公共变量我们会创建一个全局变量表GVL（Global Variable List），可以从任意POU、FB中读写访问。
+
+通过创建保持变量表（Persistent Variables），变量可以在每次关机时自动保存，并在下次开机时自动加载。CODESYS仅支持一个保持变量表，您也可以在POU里定义VAR PERSISTENT（注意这里两个单词间没有下划线），也可以自动保持变量。但该方式最终编译仍然是链接到PersistentVars中，故一般推荐只在PersistentVars中定义保持变量。
+
+保持变量还可以通过顶层模块（View-Module打开模块列表，添加库选择AC_Persistence，添加顶层模块PersistenceManager）来自定义保存路径、保存时间和保持变量的转入转出。但由于复杂度太高，一般采用配方Recipe或自己写CSV文件读写替代。
+
+网络变量NVL（Network Variable List）适用于一个网段下两台或多台设备的通讯，由CODESYS实现底层协议，我们定义一个发送者和一个接收者即可。如果需要双向通讯，则需要在两个设备下各自创建发送和接收，多设备可以组环网。一般来说，我们会在一个项目中创建多个设备，并在POU页定义公共结构体，再在网络变量中引用结构体，即可实现环网、自适应的网络变量。相对于Modbus TCP或其他基于TCP的总线来说，网络变量可以近乎无限制的创建任意变量表，没有大小端和地址问题，比较方便。
+
+
+## 4.8 日期、大小端、特殊功能
 
 ### 日期
 
@@ -318,6 +332,8 @@ VAR
 END_VAR
 
 Axis1.bCommunication:=TRUE;
+Axis1.bRegulatorOn:=TRUE;
+Axis1.bDriveStart:=TRUE;
 Axis1.bRegulatorRealState:=TRUE;
 Axis1.bDriveStartRealState:=TRUE;
 IF Axis1.nAxisState=0 THEN
@@ -329,9 +345,9 @@ Axis1.fCycleTimeSpent:=0;
 Axis1.fTaskCycle:=0.001;//任务周期
 ```
 
-之后，我们就可以用MC_Power，MC_MoveAbsolute等功能块的实例控制轴运动，此时相当于是创建了一个不需授权的虚轴。虚轴要和实轴连起来还需要做一些补丁，可以参考OpenSML，对驱动器上使能并工作在CSP模式，初始化位置等操作。需要注意的是，和标准的实轴对比，有以下几个缺点：
+之后，我们就可以用MC_MoveAbsolute等功能块的实例控制轴运动，此时相当于是创建了一个不需授权的虚轴。虚轴要和实轴连起来还需要做一些补丁，可以参考OpenSML，对驱动器上使能并工作在CSP模式，初始化位置等操作。需要注意的是，和标准的实轴对比，有以下几个缺点：
 
-1. 不好设定减速比，需要创建一个轴对象，设置好减速比后在轴的Parameters页找到实际的几个变量值。
+1. 无法设定减速比，需要自己换算并应用到TargetPosition上。
 2. 需要自己写报警，没有位置反馈时检测不到跟随误差。
 3. 特殊操作如回参、力矩模式可能会有问题。
 
