@@ -10,7 +10,15 @@ NOTE: **浏览器做visu的设置**
 若需要全屏模式，使用`C:\ungoogled-chromium\chrome.exe  --kiosk http://127.0.0.1:8080`  
 
 
-在做Visu前，建议各位读者先有一个设计思路。一般情况下，我们推荐元素不要用太多的种类，颜色可以丰富一些并用浅色，字体应用黑体或仿宋，背景可以用浅色纯色或白色90%透明度叠加的背景图片。通常情况下，我们不建议使用官方的指示灯、切换开关、码表等元素，因为图标风格不一致会有设计上的割裂感。按钮、指示灯、文字和框架都可以用矩形来做。Style选择Default或Flat Style。一般不建议在一个界面中挤满元素，而是通过分页、分框架的形式构建界面。
+在做Visu前，建议各位读者先有一个设计思路。一般情况下，我们推荐元素不要用太多的种类，颜色可以丰富一些并用浅色，字体应用黑体或仿宋，背景可以用浅色纯色或白色90%透明度叠加的背景图片。通常情况下，我们不建议使用官方的指示灯、切换开关、码表等元素，因为图标风格不一致会有设计上的割裂感。按钮、指示灯、文字和框架都可以用矩形来做。Style选择Default或Flat Style。一般不建议在一个界面中挤满元素，而是通过分页、分框架的形式构建界面。下图中，从左至右依次为
+
+- 优秀的设计：颜色搭配协调，有背景图/背景色，有选单折叠，有用户管理，时间显示，特殊按钮有特殊实现，指示灯清晰，但字体有些小。
+- 中等的设计：有菜单切换，框架架构，但色彩不协调，对比度过高，字体太细，一个框架内元素过多显得比较乱。
+- 不好的设计：颜色较单一且刺眼，按钮分隔不明显，按钮与文本框样式接近无法区分哪些可被点击。
+
+![](./images/4-13.png) 
+
+----
 
 我们可以在Application下添加Visualization页面，添加第一个visu时会自动添加Visulization Manager。添加visu时会有提示是否勾选VisuSymbols，这是系统内置的一些SVG图片库，可根据需求勾选。默认情况下visu不支持中文，下载后会出现乱码，可在Visualization Manager中勾选Use unicodestrings即可。
 
@@ -26,7 +34,7 @@ visu编辑界面右侧会有Visualization Toolbox（没有的话可以在View中
 
 矩形：矩形（或圆角矩形）是最常用的元素，它们既可以作为指示灯，又可以作为按钮，还可以显示文字、信息，亦可以作为分隔线和下拉菜单选框使用。
 
-当作为双色切换的指示灯时，编辑Colors下的Normal state和Alarm state下的Fill color，建议一个改为LightGray，另一个改为LightGreen。并将Apperance下的Line style改为Invisible（或Hollow）。再在Color variables的Toggle color关联变量即可。
+当作为双色切换的指示灯时，编辑Colors下的Normal state和Alarm state下的Fill color，建议一个改为LightGray，另一个改为LightGreen。并将Apperance下的Line style改为Invisible（或Hollow）。再在Color variables的Toggle color关联变量即可。之后所有的指示灯都可以复制这个元素，只修改关联的变量。
 
 ![](./images/4-5.gif)
 
@@ -76,11 +84,72 @@ TIP: **输入助手**
 
 ## 4.5 轴、凸轮与插补
 
-在上一小节中我们插入了 *SM_Drive_ETC_Yaskawa_SGD_Sigma7_1* 这个轴对象，我们可以对这个轴做上电、运动控制，运动控制主要分为点到点或匀速的PTP控制、凸轮和插补三大类。
+在上一小节中我们插入了 *SM_Drive_ETC_Yaskawa_SGD_Sigma7_1* 这个轴对象，我们可以对这个轴做上电、运动控制，运动控制主要分为以下三大类：
 
 1. PTP控制：使用MC_MoveAbsolute、MC_MoveVelocity等功能块直接控制轴运动，例如旋转工作台、传送带等。
 2. 凸轮控制：使用MC_CamIn参考CAM表控制，使用MC_GearIn进行按比例的耦合传动控制，适用于凸轮、挺杆、物料传动等。
 3. 插补控制：使用SM3_CNC库中的功能块，读取NC文件并按照G代码运行，可用于简单的双、三、四轴插补数控系统，需要CNC授权。
+
+插入轴对象后，可以在轴的Scaling/Mapping页设置速比，常用的设置是16#1000000（16777216脉冲/转）和16#40000（262144脉冲/转），这里的脉冲都经过驱动器换算，有的驱动器反馈实际编码器值，即对应24位编码器和18位编码器。有的驱动器还会除以一个常数比如除以16（16#10）变为16#100000（1048576脉冲/转），一般来说使用24位编码器都会除以16。设置好脉冲和电机转一圈的关系后，我们就可以根据电机转一圈实际移动的距离（由丝杆螺距或齿轮分度圆半径计算得出）来填具体的减速比。填完之后，轴对象的fSetPosition、fActualPosition等参数就是实际的位置，一般以毫米为单位。
+
+TIP: **圆形无限回转的设置**
+General页中可以选择轴的模式是旋转（Modulo）或线性（Finite），这部分翻译容易造成误解。当轴驱动的对象为旋转工作台或传送带时，我们一般仍然选择运动模式为线性，这样不会有最短路径的问题。一般来说，只有使用凸轮时会将轴的运动模式设为旋转。
+
+### 4.5.1 PTP控制
+
+在使用PTP控制之前，我先简单介绍一下控制轴运动的两种基本方式（CiA402标准）。
+
+1. 驱动器使用PP（Profile Position）、PV（Profile Velocity）等模式为驱动器控制，EtherCAT总线不需要实时性，只要能把报文发到即可。驱动器的Modes of Operation为1或3，具体的位置控制在驱动器内实现，速度曲线一般为梯形斜坡加驱动器内置的Smooth平滑功能。
+
+2. 驱动器使用CSP（Cyclic synchronous position mode），EtherCAT总线需要保证实时性，驱动器的Modes of Operation为8，位置控制主体在PLC内实现，速度曲线在CODESYS的轴对象上选择，一般为Trapezoid（一次斜坡，或称梯形）、SIN<sup>2</sup>（Sin2曲线，是S曲线的一种，不需要设定加加速度） 、Quadratic（二次曲线，标准S曲线，需要设定加加速度）三种。由于Sin2曲线或更高阶的速度曲线打断后可能会有加加速度的突变，一般用的最多的为梯形和二次。对于运动控制来说，阶数越高运动越平稳，但有个极限值，大多数运动到2次以上意义就不大了，因为驱动器控制还是会带来位置差异。实际应用中最常规的为2次曲线，最高的的为6次曲线。
+
+我们常说的SoftMotion是用CSP模式，位置在PLC内计算并按照实时周期发送给驱动器。一般情况下，驱动器的位置反馈只用于判断跟随误差，不会带入到位置的计算中。即使是用MC_MoveVelocity控制速度的模式，实际发送给驱动器的还是下个周期的目标位置。
+
+一个简化的位置控制代码如下，给定fTargetPosition，再给xExecute即可开始运动。对于频繁变更位置的场景，可以将xExecute不停取反：
+
+```iecst
+VAR
+	mcp:MC_POWER;
+	mcm:MC_MoveAbsolute;
+	mcs:MC_Stop;
+	xExecute: BOOL;
+	fTargetPosition: LREAL;
+	rSpeed: LREAL:=30;
+	rAcc: LREAL:=20;
+	rJerk: LREAL:=100;
+	biEmergencyStop:BOOL:=TRUE;
+END_VAR
+
+mcp(Axis:=AxisT,Enable:=TRUE,bRegulatorOn:=TRUE,bDriveStart:=TRUE);
+mcm(Axis:=AxisT,Execute:=xExecute,Position:=fTargetPosition,Velocity:=rSpeed,Acceleration:=rAcc,Deceleration:=rAcc,Jerk:=rJerk);
+mcs(Axis:=AxisT,Execute:=NOT biEmergencyStop AND mcp.Status,Deceleration:=rAcc,Jerk:=rJerk);
+```
+
+### 4.5.2 凸轮控制
+
+电子凸轮由一个虚拟主轴从0度到360度按一定速度做匀速运动，从轴按照设定的凸轮位置曲线做重复运动，凸轮曲线（Cam Table）可定义主轴在任意角度时从轴的位置、速度和加速度以达到一个平滑的运动曲线。凸轮曲线不止可用于凸轮，少数情况下也可以用挺杆功能来实现挺杆运动，但一般情况下由程序判断凸轮主轴角度更易实现挺杆功能。此外，还可以自定义缩放，再用SMC_ControlAxisByPos直接控制轴的位置运动。
+
+凸轮控制不同行业有不同的控制方法，此处不再示范代码。在实际程序中，需注意启停和异常时的加耦和解耦操作。
+
+### 4.5.3 插补控制
+
+CODESYS声称支持6轴插补，但大多实际应用只用到2轴、3轴插补，高于3轴需要做TCP程序，复杂度提升很多。这里简单说一下三轴龙门的程序结构。插补运动时，XYZ坐标根据G代码指示运动，选择不同的G代码文件即可做不同的复合运动。一般来说，一个支持插补运动的PLC由以下部分组成：
+
+1. 文件选择和展示（PRG_FileProvider）
+2. 路径预规划（CNC_PreparePath）
+3. 路径执行（CNC）
+4. M代码（PRG_MFunction）
+5. 主程序（PRG_Main）
+
+其中，核心代码在路径预规划和路径执行中。当加载完程序并启动后，路径预规划模块开始执行。通过SMC_ReadNCFile读取文件，从ncprog输出可获取到原始程序的文字内容。紧接着，我们通过SMC_NCDecoder功能块对ncprog进行解码，获得poqDataOut输出，这是一个指向SMC_OUTQUEUE的指针，之后的数据处理都围绕poqDataOut来做，相当于一段数据从poqDataIn经过功能块实例流向poqDataOut。
+
+之后，我们需要对路径进行粘合，否则每执行一行代码所有轴都会完整启停。通过SMC_SmoothPath功能块对SMC_NCDecoder的数据进行处理并写入到自己的poqDataOut中。最后，通过SMC_CheckVelocities检查路径中无法拟合的急转弯，将这些转弯部分的速度降至0。路径预处理即完成。
+
+路径预处理和路径执行是可以同时做的，对于上千行的G代码文件，只要有一部分预处理完成的数据即可边处理边执行。在CNC程序中，我们首先使用MC_Power功能块对X、Y、Ys、Z各轴进行上电、复位等操作，当各轴状态均正常后，通过SMC_Interpolator插补器对poqPath进行插补，得到一组数据输出，该输出为实时的各轴预期位置。之后，通过SMC_TRAFO_Gantry3将各轴数据分解为X、Y、Z三个方向，再用SMC_ControlAxisByPos对各轴进行控制。
+
+具体的G代码相关解释可以参考 [DIN 66025 Fundamentals](https://help.codesys.com/webapp/_sm_cnc_din66025_basics;product=codesys_softmotion;version=4.6.0.0){target=_blank} 
+
+
 
 ## 4.6 配方和报警
 

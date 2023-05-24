@@ -15,7 +15,7 @@ TIP: **通讯自动优化**
 ## 3.2 EtherCAT的专用设置
 
 NOTE: **系统设置**
-- Linux SL/Raspberry pi：不需要特殊的设置。不过若Task Jitter较高可能造成DC同步报警，可修改DCInSyncWindow参数，一般建议改大到500us。  
+- Linux SL/Raspberry pi：不需要特殊的设置。若有DC同步报警，可修改DCInSyncWindow参数，一般建议改大到500us。  
 - ControlWin：需要安装 [WinPcap](https://www.winpcap.org/install/bin/WinPcap_4_1_3.exe){target=_blank} 软件才可以运行EtherCAT，且其不具有实时性，不可以运行SoftMotion。  
 - ControlRTE：需要确保网卡已经安装了专用驱动，您应该可以在设备管理器的网络适配器中看到网卡为CoDeSys Gigabit Network。若开DC和不开DC时发包数量不一致，则需要考虑重装RTE。
 
@@ -25,7 +25,7 @@ EtherCAT总线依赖设备描述文件，您需要先在工具-设备管理器�
 
 ![](./images/3-2.png) 
 
-当您创建EtherCAT Master设备时，会自动创建EtherCAT_Task任务。该任务的周期由EtherCAT Master设备的Cycle Time参数指定，请勿手动修改。此外，需要选择EtherCAT网卡，并建议勾选自动重启从站。
+当您创建EtherCAT Master设备时，会自动创建EtherCAT_Task任务。该任务的周期由EtherCAT Master设备的Cycle Time参数指定，请勿手动修改。此外，需要选择EtherCAT网卡MAC地址或根据网卡名称自动选择（推荐后者），并建议勾选自动重启从站。
 
 ![](./images/3-3.png) 
 
@@ -35,11 +35,11 @@ WARNING: **使用运动控制时的任务设置**
 EtherCAT也支持扫描，添加EtherCAT Master并选择网卡后，登陆一次设备并下载PLC。无需启动，此时在EtherCAT Master设备上右键-扫描设备 即可进行扫描。添加完EtherCAT模块后，可在对应模块的I/O Mapping页中关联变量。某些时候我们还会用到Startup Parameters，例如汇川GL20系列的模拟量模块通过设置transform mode改变电压/电流模式。
 
 TIP: **设备关联与地址关联**
-在使用TIA时我们通常使用地址关联，直接将变量关联到I、Q地址上。但在CODESYS中，一般情况下我们推荐在I/O Mapping中关联变量，这种方式不受设备地址影响，不容易出错。
+在使用TIA时我们通常使用地址关联，直接将变量关联到I、Q地址上。但在CODESYS中，一般情况下我们推荐在I/O Mapping中关联变量，这种方式不受设备地址影响，不容易出错。TC3需要定义AT %I\*/Q\*才可以映射，而CODESYS不需要这样做，可以关联任意变量。
 
 ## 3.3 Profinet的专用设置
 
-根据经验来说，CODESYS的Profinet需求大多数都跑在RT模式，通讯周期一般在1到32MS。由于EPOS的功能块只在博图软件里闭源，所以PTP带轴的实现也极少。大多数情况下，CODESYS的PN需求都是旧设备改造、总线测试或协议转接。
+根据经验来说，CODESYS的Profinet需求大多数都跑在RT模式，通讯周期一般在2到32MS。由于EPOS的功能块只在博图软件里闭源，所以PTP带轴的实现也极少。大多数情况下，CODESYS的PN需求都是旧设备改造、总线测试或协议转接。
 
 作为PN主站时，操作和EtherCAT非常相似，添加PN主站、扫描或手动添加设备，登录即可。如需分配地址可在扫描时设定。PN使用普通以太网交换机就可实现星形连接，每个设备都有独立的、在一个网段下的IP。与EtherCAT不同的是，一般来说PN设备下插入的为报文Telegram（或叫模块Module），仍然是在这个设备上。
 
@@ -107,7 +107,7 @@ sudo service codesyscontrol restart
 
 ## 3.8 TCP UDP的专用设置
 
-对于TCP、UDP的底层我们不再重复介绍，有需要的童鞋可以在搜索网站上查一下相关资料。在PLC的实际应用中，我们经常把TCP作为可检测、可靠的UDP使用，即把TCP当作收发包而不是流模式使用。为了达成这一点，我们一般在一个PLC周期内对一个IP、端口只做一次读和/或写操作。如果在一个周期内多次写包，则可能在协议层被自动粘包。此外，单个包的大小超过一定数量也会被自动拆包，需要在应用层做粘包操作。
+对于TCP、UDP的底层我们不再重复介绍，在PLC的实际应用中，我们一般把TCP作为可检测、可靠的UDP使用，即把TCP当作收发包而不是流模式使用。为了达成这一点，我们一般在一个PLC周期内对一个IP、端口只做一次读和/或写操作。如果在一个周期内多次写包，则可能在协议层被自动粘包。此外，单个包的大小超过一定数量也会被自动拆包，需要在应用层做粘包操作。
 
 TCP和UDP都是使用NBS库实现，在CODESYS中分为两个库，一个是官方库（Net Base Services），另一个是CAA库（CAA Net Base Services）。CAA的全称为CoDeSys Automation Alliance，现在已经很少提及，但代码非常稳定。本文档的TCP和UDP以CAA库实现，官方库的实现方法会有细微的区别。
 
