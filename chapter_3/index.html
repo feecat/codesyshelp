@@ -141,12 +141,13 @@
 <p>
 使用运动控制（SoftMotion）时，运动控制相关程序实例（如MC_Power、MC_MoveAbsolute等）所在的程序块必须安排到EtherCAT_Task下执行。</p>
 </div>
-<p>EtherCAT也支持扫描，添加EtherCAT Master并选择网卡后，登陆一次设备并下载PLC。无需启动，此时在EtherCAT Master设备上右键-扫描设备 即可进行扫描。添加完EtherCAT模块后，可在对应模块的I/O Mapping页中关联变量。某些时候我们还会用到Startup Parameters，例如汇川GL20系列的模拟量模块通过设置transform mode改变电压/电流模式。</p>
+<p>EtherCAT也支持扫描，添加EtherCAT Master并选择网卡后，登陆一次设备并下载PLC。无需启动，此时在EtherCAT Master设备上右键-扫描设备 即可进行扫描。添加完EtherCAT模块后，可在对应模块的I/O Mapping页中关联变量。</p>
 <div class="admonition tip">
 <p class="admonition-title">设备关联与地址关联</p>
 <p>
 在使用TIA时我们通常使用地址关联，直接将变量关联到I、Q地址上。但在CODESYS中，一般情况下我们推荐在I/O Mapping中关联变量，这种方式不受设备地址影响，不容易出错。TC3需要定义AT %I*/Q*才可以映射，而CODESYS不需要这样做，可以关联任意变量。</p>
 </div>
+<p>添加设备后，有部分设备会需要修改Startup Parameters，例如汇川GL20系列的模拟量模块通过设置transform mode改变电压/电流模式。有部分设备可选Process Data，如伺服驱动器配置默认在CSP模式，若要使用PP、PV模式则需要修改Process Data中的选项。可按实际情况修改。</p>
 <h2 id="33-profinet">3.3 Profinet的专用设置</h2>
 <p>根据经验来说，CODESYS的Profinet需求大多数都跑在RT模式，通讯周期一般在2到32MS。由于EPOS的功能块只在博图软件里闭源，所以PTP带轴的实现也极少。大多数情况下，CODESYS的PN需求都是旧设备改造、总线测试或协议转接。</p>
 <p>作为PN主站时，操作和EtherCAT非常相似，添加PN主站、扫描或手动添加设备，登录即可。如需分配地址可在扫描时设定。PN使用普通以太网交换机就可实现星形连接，每个设备都有独立的、在一个网段下的IP。与EtherCAT不同的是，一般来说PN设备下插入的为报文Telegram（或叫模块Module），仍然是在这个设备上。</p>
@@ -159,7 +160,7 @@ Linux.ProtocolFilter=3
 <div class="admonition caution">
 <p class="admonition-title">不建议使用EnableSetIpAndMask</p>
 <p>
-PLC作为PN从站时，建议固定地址而不是使用 <a href="https://help.codesys.com/webapp/_pnio_runtime_configuration_device;product=core_ProfinetIO_Configuration_Editor;version=4.1.0.0" target="_blank">EnableSetIpAndMask</a> ，即站点名称和IP都在CODESYS项目中指定。如果您需要可变的IP，请确保由上位指定的IP不会与其它网口在同一网段下，并且 <a href="https://help.codesys.com/webapp/_pnio_firewall_codesys_communication;product=core_ProfinetIO_Configuration_Editor;version=4.1.0.0" target="_blank">不要用PN从站所使用的网口登录到PLC</a> 。</p>
+PLC作为PN从站时，建议固定地址而不是使用 <a href="https://help.codesys.com/webapp/_pnio_runtime_configuration_device;product=core_ProfinetIO_Configuration_Editor;version=4.1.0.0" target="_blank">EnableSetIpAndMask</a> ，即站点名称和IP都在CODESYS项目中指定。如果您需要可变的IP，请确保由上位指定的IP不会与其它网口在同一网段下，并且 <a href="https://help.codesys.com/webapp/_pnio_firewall_codesys_communication;product=core_ProfinetIO_Configuration_Editor;version=4.1.0.0" target="_blank">避免用PN从站所使用的网口登录到PLC</a> 。</p>
 </div>
 <h2 id="34-modbus-rtu">3.4 Modbus RTU的专用设置</h2>
 <p>在Linux系统中，需编辑配置文件指定COM端口分配。例如：</p>
@@ -185,7 +186,7 @@ Linux.Devicefile.2=/dev/ttyUSB0
 ScriptPath=/opt/codesys/scripts/
 ScriptName=rts_set_baud.sh
 </code></pre>
-<p>此外，can驱动加载可能晚于运行时，可以关闭自启<code>sudo systemctl disable codesyscontrol</code>，延迟启动codesys服务。编辑/etc/rc.local，在exit 0之前插入：</p>
+<p>此外，can驱动加载可能晚于运行时导致无法通讯，可以关闭运行时自启动<code>sudo systemctl disable codesyscontrol</code>，之后延迟手动启动codesys服务。编辑/etc/rc.local，在exit 0之前插入：</p>
 <pre><code>sleep 5
 sudo service codesyscontrol restart
 </code></pre>
