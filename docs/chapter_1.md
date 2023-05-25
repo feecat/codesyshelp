@@ -89,7 +89,7 @@ CODESYS Installer（APInstaller）是个彻头彻尾的半成品软件，我想�
 
 ### Linux（Raspberry Pi）
 
-Linux（或Raspberry Pi）通过SSH安装，您需要先安装对应的包，如 **CODESYS Control for Raspberry PI 4.6.0.0.package** 。建议在网络环境下，用CODESYS Installer-Browse搜索raspberry，选择版本号进行安装。
+Linux（或Raspberry Pi）通过SSH安装，您需要先安装对应的包，如 **CODESYS Control for Raspberry PI 4.6.0.0.package** 。建议在网络环境下，用开始菜单或工具中的CODESYS Installer - Browse搜索raspberry，选择版本号进行安装。
 ![](./images/1-14.png) 
 
 安装完成后，工具菜单下会多出Update Raspberry pi选项。输入用户名和密码，输入目标IP地址，选择版本，单击Install即可安装。
@@ -128,14 +128,14 @@ ControlRTE：`C:\ProgramData\CODESYS\CODESYSControlRTEV3\CODESYSControl_User.cfg
 ControlWin：`C:\ProgramData\CODESYS\CODESYSControlWinV3x64\[一串字母]\CODESYSControl.cfg`  
 
 NOTE: **建议取消用户管理（默认强制的登录密码保护）**
-编辑配置文件，找到**[CmpUserMgr]** 下的`;SECURITY.UserMgmtEnforce=NO`，删除最前面的`;`符号并保存。
+编辑配置文件，找到**[CmpUserMgr]** 下的`;SECURITY.UserMgmtEnforce=NO`，删除最前面的`;`符号并保存。如果已激活过用户管理，可参考 [Solution 1](https://faq.codesys.com/pages/viewpage.action?pageId=115834919){target=_blank} 。
 
 
 ## 1.6 许可激活和转移
 
 所有受支持的电脑和设备都可以安装CODESYS RTE，主要包括x86 Windows、x86 Linux和arm Linux。当前的政策是无授权状态下可以运行总线、softmotion、visu等功能30分钟，RTE本身和PLC逻辑2小时，超出时间后会停止对应的功能或退出RTE。激活授权后可以无限制地使用对应授权的功能。
 
-部分授权是针对OEM厂商的，只有特定厂商的设备才可以被激活，厂商标识通过SysTargetOEM驱动指定或包含在RTE本体中。一般而言，单条授权码包含多项功能（如RTE SM WV）即为OEM定制版授权。您可以在 [store.codesys.cn](http://store.codesys.cn){target=_blank}或[store.codesys.com](https://store.codesys.com){target=_blank} 上查看有哪些授权，各包含什么功能。有些厂商如汇川、施耐德、禾川等不需要授权，它们集成在定制版RTE或驱动中。
+部分授权是针对OEM厂商的，只有特定厂商的设备才可以被激活，厂商标识通过SysTargetOEM驱动指定或包含在RTE本体中。一般而言，单条授权码包含多项功能（如RTE SM WV）即为OEM定制版授权。您可以在 [store.codesys.cn](http://store.codesys.cn){target=_blank} 或[store.codesys.com](https://store.codesys.com){target=_blank} 上查看有哪些授权，各包含什么功能。有些厂商如汇川、施耐德、禾川等不需要授权，它们集成在定制版RTE或驱动中。
 
 Codesys授权依赖**CodeMeter**服务，CodeMeter是wibu的一套加密软件，可通过软容器或硬件加密狗实现加密。运行时授权可以激活在加密狗上，也可以激活在软容器上。授权激活时IDE所在电脑需要连接网络以访问在线许可服务，激活后可以完全离线。但激活后授权就无法转移，与加密狗或软容器绑定。
 
@@ -155,13 +155,17 @@ WARNING:  通常情况下，离线转移并不意味着可以从一台电脑转�
 
 ## 1.7 实时补丁和实时驱动
 
-一般来说，PLC代码的运行需要一个稳定的循环周期以明确代码执行时间及进行通讯。为了保证PLC的周期循环可以顺利执行，需要实时性。在Linux中，实时性靠Preempt-RT实时补丁保证。在Windows中，分为Control Win和Control RTE两种。安装IDE时会自带Control Win，一般用于仿真，不具有实时性。而Control RTE从专用安装包安装，隔离掉一个物理核心，具有实时性。
+一般来说，PLC代码的运行需要一个稳定的循环周期以明确代码执行时间及进行通讯。为了保证PLC的周期循环可以顺利执行，需要实时性。
 
-对于EtherCAT：
+- 在Linux中，实时性靠Preempt-RT实时补丁保证。arm Linux的实时补丁需要自己编译，部分平台如树莓派有 [不定期更新的实时内核](https://github.com/kdoren/linux/releases){target=_blank} 。x86可以用 [LinuxCNC的镜像](http://linuxcnc.org/downloads/){target=_blank} ，卸载LinuxCNC软件即可。
+
+- 在Windows中，分为Control Win和Control RTE两种。安装IDE时会自带Control Win，一般用于仿真，不具有实时性。而Control RTE从专用安装包安装，隔离掉一个物理核心，具有实时性。
+
+对于EtherCAT总线驱动：
 
 - Linux通过RAW Sockets，不需要特殊驱动，实时性相对差一些。
 - Control Win由winpcap软件收发包，不具有实时性。
-- Control RTE由专用网络驱动进行收发包，具有实时性。
+- Control RTE由专用网络驱动（如CmpEt1000Drv）进行收发包，具有实时性。
 
 除了以上三种RTE外，还有特殊的系统比如STM32裸机、FPGA等有特殊方法实现，具体实现方式需要咨询官方。
 

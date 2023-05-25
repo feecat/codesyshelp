@@ -2,7 +2,7 @@
 
 ## 4.1 Visu结构组成
 
-Visuallization字面意思即可视化，可以理解为内置的组态屏。最常用的是WebVisu，可以通过浏览器本地访问或局域网内另一台PC远程访问。本地用chromium的kiosk模式打开即和TargetVisu效果一致，且配置更自由。故现在很少会用TargetVisu。
+Visuallization字面意思即可视化，可以理解为内置的组态屏。visu可以直接操作plc变量，比外置组态屏方便很多。最常用的是WebVisu，可以通过浏览器本地访问或局域网内另一台PC远程访问。本地用chromium的kiosk模式打开即和TargetVisu效果一致，且配置更自由。故现在很少会用TargetVisu。
 
 NOTE: **浏览器做visu的设置**
 推荐使用 [ungoogled-chromium](https://ungoogled-software.github.io/ungoogled-chromium-binaries/){target=_blank} 作为Chrome的离线、免安装、去更新化方案。创建快捷方式并编辑属性中的目标栏。  
@@ -10,7 +10,7 @@ NOTE: **浏览器做visu的设置**
 若需要全屏模式，使用`C:\ungoogled-chromium\chrome.exe  --kiosk http://127.0.0.1:8080`  
 
 
-在做Visu前，建议各位读者先有一个设计思路。一般情况下，我们推荐元素不要用太多的种类，颜色可以丰富一些并用浅色，字体应用黑体或仿宋，背景可以用浅色纯色或白色90%透明度叠加的背景图片。通常情况下，我们不建议使用官方的指示灯、切换开关、码表等元素，因为图标风格不一致会有设计上的割裂感。按钮、指示灯、文字和框架都可以用矩形来做。Style选择Default或Flat Style。一般不建议在一个界面中挤满元素，而是通过分页、分框架的形式构建界面。下图中，从左至右依次为
+在做visu前，建议各位读者先有一个设计思路。一般情况下，我们推荐元素不要用太多的种类，颜色可以丰富一些并用浅色，字体应用黑体或仿宋，背景可以用浅色纯色或白色90%透明度叠加的背景图片。通常情况下，我们不建议使用官方的指示灯、切换开关、码表等元素，因为图标风格不一致会有设计上的割裂感。按钮、指示灯、文字和框架都可以用矩形来做。Style选择Default或Flat Style。一般不建议在一个界面中挤满元素，而是通过分页、分框架的形式构建界面。下图中，从左至右依次为
 
 - 优秀的设计：颜色搭配协调，有背景图/背景色，有选单折叠，有用户管理，时间显示，特殊按钮有特殊实现，指示灯清晰，但字体有些小。
 - 中等的设计：有菜单切换，框架架构，但色彩不协调，对比度过高，字体太细，一个框架内元素过多显得比较乱。
@@ -127,7 +127,7 @@ mcs(Axis:=AxisT,Execute:=NOT biEmergencyStop AND mcp.Status,Deceleration:=rAcc,J
 
 ### 4.5.2 凸轮控制
 
-电子凸轮由一个虚拟主轴从0度到360度按一定速度做匀速运动，从轴按照设定的凸轮位置曲线做重复运动，凸轮曲线（Cam Table）可定义主轴在任意角度时从轴的位置、速度和加速度以达到一个平滑的运动曲线。凸轮曲线不止可用于凸轮，少数情况下也可以用挺杆功能来实现挺杆运动，但一般情况下由程序判断凸轮主轴角度更易实现挺杆功能。此外，还可以自定义缩放，再用SMC_ControlAxisByPos直接控制轴的位置运动。
+电子凸轮由一个虚拟主轴从0度到360度按一定速度做匀速运动，从轴按照设定的凸轮位置曲线做重复运动，凸轮曲线（Cam Table）可定义主轴在任意角度时从轴的位置、速度和加速度以达到一个平滑的运动曲线。凸轮曲线不止可用于凸轮，少数情况下也可以用挺杆功能来实现挺杆运动，但一般情况下由程序判断凸轮主轴角度更易实现挺杆功能。此外，还可以将从轴也定义为虚轴，自定义缩放比例，再用SMC_ControlAxisByPos直接控制轴的位置运动。
 
 凸轮控制不同行业有不同的控制方法，此处不再示范代码。在实际程序中，需注意启停和异常时的加耦和解耦操作。
 
@@ -350,6 +350,62 @@ Axis1.fTaskCycle:=0.001;//任务周期
 1. 无法设定减速比，需要自己换算并应用到TargetPosition上。
 2. 需要自己写报警，没有位置反馈时检测不到跟随误差。
 3. 特殊操作如回参、力矩模式可能会有问题。
+
+----
+
+### 共享内存
+
+共享内存 (Shared memory architecture)可以在**本机**，注意必须是同一CPU上，可以共享一段或多段内存地址，一般由PLC共享两段，一段只读，一段只写。C#或C++应用去访问，速度极快，瓶颈可以覆盖CODESYS的扫描周期，常用于外置算法处理。Shared Memory可以参考 [CODESYS官方示例](https://forge.codesys.com/prj/codesys-example/shared-memory-c/home/Home/){target=_blank} 。这里给出一个官方没有的树莓派（Linux）下C++的应用，若使用Geany，编译指令`g++ -Wall -o "%e" "%f" -lrt`；若使用Qt Creator，pro文件中`LIBS += -lrt`。请注意要用管理员权限运行Geany/QtCreator，否则报Segmentation fault。
+```cpp
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <string.h>
+#include <unistd.h>
+
+struct DataExchange {
+    int i1;
+    int i2;
+};
+
+int main()
+{
+    struct DataExchange *pRead, *pWrite;
+    char sSharedMemReadName[100] = "_CODESYS_SharedMemoryTest_Write"; 
+    char sSharedMemWriteName[100] = "_CODESYS_SharedMemoryTest_Read";
+
+    int fdRead = shm_open(sSharedMemReadName, O_CREAT | O_RDWR, S_IRWXU | S_IRWXG);
+    printf("Shared Memory Read: %s %d\n\n",sSharedMemReadName, fdRead);
+    ftruncate(fdRead, sizeof(*pRead));
+    pRead = (DataExchange*)mmap(0, sizeof(*pRead), PROT_READ | PROT_WRITE, MAP_SHARED, fdRead, 0);
+    close(fdRead);
+
+    int fdWrite = shm_open(sSharedMemWriteName, O_CREAT | O_RDWR, S_IRWXU | S_IRWXG);
+    printf("Shared Memory Write: %s %d\n\n",sSharedMemWriteName, fdWrite);
+    ftruncate(fdWrite, sizeof(*pWrite));
+    pWrite = (DataExchange*)mmap(0, sizeof(*pWrite), PROT_READ | PROT_WRITE, MAP_SHARED, fdWrite, 0);
+    close(fdWrite);
+
+    do
+    {
+        sleep(1);
+        printf("pRead->i1: %d pRead->i2: %d pWrite->i1: %d pWrite->i2: %d\n", 
+               pRead->i1, pRead->i2, pWrite->i1, pWrite->i2);
+        printf("Press 'Enter' to increment values or 'q' and then 'Enter' to quit\n");    
+        pWrite->i1++;
+        pWrite->i2--;     
+    } while (getchar() != 'q');
+
+    munmap(pRead, sizeof(*pRead));
+    shm_unlink(sSharedMemReadName);
+
+    munmap(pWrite, sizeof(*pWrite));
+    shm_unlink(sSharedMemWriteName); 
+    exit(0);
+}
+```
 
 ----
 

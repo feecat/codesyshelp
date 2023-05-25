@@ -32,10 +32,12 @@ EtherCAT总线依赖设备描述文件，您需要先在工具-设备管理器�
 WARNING: **使用运动控制时的任务设置**
 使用运动控制（SoftMotion）时，运动控制相关程序实例（如MC_Power、MC_MoveAbsolute等）所在的程序块必须安排到EtherCAT_Task下执行。
 
-EtherCAT也支持扫描，添加EtherCAT Master并选择网卡后，登陆一次设备并下载PLC。无需启动，此时在EtherCAT Master设备上右键-扫描设备 即可进行扫描。添加完EtherCAT模块后，可在对应模块的I/O Mapping页中关联变量。某些时候我们还会用到Startup Parameters，例如汇川GL20系列的模拟量模块通过设置transform mode改变电压/电流模式。
+EtherCAT也支持扫描，添加EtherCAT Master并选择网卡后，登陆一次设备并下载PLC。无需启动，此时在EtherCAT Master设备上右键-扫描设备 即可进行扫描。添加完EtherCAT模块后，可在对应模块的I/O Mapping页中关联变量。
 
 TIP: **设备关联与地址关联**
 在使用TIA时我们通常使用地址关联，直接将变量关联到I、Q地址上。但在CODESYS中，一般情况下我们推荐在I/O Mapping中关联变量，这种方式不受设备地址影响，不容易出错。TC3需要定义AT %I\*/Q\*才可以映射，而CODESYS不需要这样做，可以关联任意变量。
+
+添加设备后，有部分设备会需要修改Startup Parameters，例如汇川GL20系列的模拟量模块通过设置transform mode改变电压/电流模式。有部分设备可选Process Data，如伺服驱动器配置默认在CSP模式，若要使用PP、PV模式则需要修改Process Data中的选项。可按实际情况修改。
 
 ## 3.3 Profinet的专用设置
 
@@ -53,7 +55,7 @@ Linux.ProtocolFilter=3
 ```
 
 CAUTION: **不建议使用EnableSetIpAndMask**
-PLC作为PN从站时，建议固定地址而不是使用 [EnableSetIpAndMask](https://help.codesys.com/webapp/_pnio_runtime_configuration_device;product=core_ProfinetIO_Configuration_Editor;version=4.1.0.0){target=_blank} ，即站点名称和IP都在CODESYS项目中指定。如果您需要可变的IP，请确保由上位指定的IP不会与其它网口在同一网段下，并且 [不要用PN从站所使用的网口登录到PLC](https://help.codesys.com/webapp/_pnio_firewall_codesys_communication;product=core_ProfinetIO_Configuration_Editor;version=4.1.0.0){target=_blank} 。
+PLC作为PN从站时，建议固定地址而不是使用 [EnableSetIpAndMask](https://help.codesys.com/webapp/_pnio_runtime_configuration_device;product=core_ProfinetIO_Configuration_Editor;version=4.1.0.0){target=_blank} ，即站点名称和IP都在CODESYS项目中指定。如果您需要可变的IP，请确保由上位指定的IP不会与其它网口在同一网段下，并且 [避免用PN从站所使用的网口登录到PLC](https://help.codesys.com/webapp/_pnio_firewall_codesys_communication;product=core_ProfinetIO_Configuration_Editor;version=4.1.0.0){target=_blank} 。
 
 ## 3.4 Modbus RTU的专用设置
 
@@ -97,7 +99,7 @@ EIP也可以不使用设备描述文件，而是通过标准设备（Generic Eth
 ScriptPath=/opt/codesys/scripts/
 ScriptName=rts_set_baud.sh
 ```
-此外，can驱动加载可能晚于运行时，可以关闭自启`sudo systemctl disable codesyscontrol`，延迟启动codesys服务。编辑/etc/rc.local，在exit 0之前插入：
+此外，can驱动加载可能晚于运行时导致无法通讯，可以关闭运行时自启动`sudo systemctl disable codesyscontrol`，之后延迟手动启动codesys服务。编辑/etc/rc.local，在exit 0之前插入：
 ```
 sleep 5
 sudo service codesyscontrol restart
