@@ -149,7 +149,7 @@
 </div>
 <p>添加设备后，有部分设备会需要修改Startup Parameters，例如汇川GL20系列的模拟量模块通过设置transform mode改变电压/电流模式。有部分设备可选Process Data，如伺服驱动器配置默认在CSP模式，若要使用PP、PV模式则需要修改Process Data中的选项。可按实际情况修改。</p>
 <h2 id="33-profinet">3.3 Profinet的专用设置</h2>
-<p>根据经验来说，CODESYS的Profinet需求大多数都跑在RT模式，通讯周期一般在2到32MS。由于EPOS的功能块只在博图软件里闭源，所以PTP带轴的实现也极少。大多数情况下，CODESYS的PN需求都是旧设备改造、总线测试或协议转接。</p>
+<p>根据经验来说，CODESYS的Profinet仅使用RT模式，通讯周期一般在2到32MS。IRT需要特殊硬件才可以实现。由于EPOS的功能块只在博图软件里闭源，所以PTP带轴的实现也极少。大多数情况下，CODESYS的PN需求都是旧设备改造、总线测试或协议转接。</p>
 <p>作为PN主站时，操作和EtherCAT非常相似，添加PN主站、扫描或手动添加设备，登录即可。如需分配地址可在扫描时设定。PN使用普通以太网交换机就可实现星形连接，每个设备都有独立的、在一个网段下的IP。与EtherCAT不同的是，一般来说PN设备下插入的为报文Telegram（或叫模块Module），仍然是在这个设备上。</p>
 <p><img alt="" src="../images/3-4.png" /> </p>
 <p>无论作为PN主站还是PN从站，都是在Ethernet设备下加PN主/从，而不是用CIFX卡。当PLC作为PN从站时，Windows系统中需要将防火墙打开，Linux系统中需要编辑配置文件，在最下面增加：</p>
