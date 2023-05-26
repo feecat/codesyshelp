@@ -12,21 +12,56 @@
 8. 创建文件夹归纳Visu、POU、Struct和GVL等。
 9. 较长的判断逻辑可以分行，并在每一行做好注释。变量名不宜过长，变量深度一般不超过3层。
 
-## 6.2 基础的visu、softmotion项目
+## 6.2 CASE分步
+
+CASE是ST的基础语法，很多老师傅从梯形图转到ST编程后不会灵活运用CASE分步，这里单独拎出来做一小节。在实际应用中，十个程序有八个都会用CASE分步以清晰流程。例如，一个传送带设备，主体结构如下：传送带运行 -> 传感器1检测到物体，传送带停止 -> 气缸1动作，500MS后松开 -> 等待传感器2 -> 传送带运行。
+
+```iecst
+CASE iState OF
+    0:
+        Out.Trans:=TRUE;//传送带运行
+        IF In.Sensor1 THEN//检测到Sensor1，跳转到第10步
+			Out.Trans:=FALSE;
+            iState:=10;
+        END_IF
+    10:
+        Out.Cylinder:=TRUE;//气缸打开
+        ton_Delay(IN:=TRUE,PT:=T#500MS);//计时器500MS
+        IF ton_Delay.Q THEN
+            ton_Delay(IN:=FALSE);//复位计时器
+            Out.Cylinder:=FALSE;//关闭气缸
+            iState:=20;//跳转到第20步
+        END_IF
+    20:
+        IF In.Sensor2 THEN//检测到Sensor2，跳转到0步
+            iState:=0;
+        END_IF
+END_CASE
+```
+
+CASE分步时用的iState一般选INT，每个步骤一般间隔10以方便后期增减步骤，报警时做一个特殊步骤例如999。有些自动化流程中会有暂停再继续的需求，可在暂停时根据iState的值判断能否继续，对iState加1或减1操作一次让流程卡住，需要继续时恢复iState的值即可从中断步骤继续运行。
+
+当使用Visu时，iState还可以用作当前步骤显示。添加一个TextList，将ID与iState关联并用作文本框的Dynamic text index即可。
+
+## 6.3 基础的visu、softmotion项目
 
 ![](./images/6-1.png) 
 
-该项目较为简单，使用了两个安川伺服轴，均使用MC_MoveAbsolute基础运动控制。使用了ImagePool嵌入背景图片和LOGO，使用PersistentVars保存参数配置。
+该项使用了两个安川伺服轴，用MC_MoveAbsolute做基础的运动控制。使用了ImagePool嵌入背景图片和LOGO，使用PersistentVars保存参数配置。
 
-## 6.3 三轴龙门CNC
+## 6.4 三轴龙门CNC
 
 ![](./images/6-2.png) 
 
-## 6.4 多总线网关
+该项目使用四个伺服轴搭建龙门结构的CNC，使用Visu进行加载文件、手动和执行程序的操作，并在本地通过浏览器显示。代码主体结构参考官方示例 `C:\Program Files\CODESYS 3.5.17.30\CODESYS\Projects\SoftMotion\4.10.0.0\Examples\Tutorial\`。
 
-FIXME
+## 6.5 多总线网关
 
-## 6.5 常见问题答疑
+![](./images/6-3.png) 
+
+该项目将PLC作为ProfiNet从站，由S7-1200连接过来。同时作为EtherNET/IP主站，将数据桥接。
+
+## 6.6 常见问题答疑
 
 冗余：CODESYS支持冗余，但在冗余框架内的两台设备都需要独立的冗余授权。且EtherCAT冗余需要额外的EtherCAT专用交换机，不支持ProfiNET冗余。理论上来说EtherCAT冗余也无法做到dc不中断，可能会造成轴抖动等问题。
 
