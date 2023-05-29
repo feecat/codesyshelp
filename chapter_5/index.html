@@ -70,17 +70,23 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#52">5.2 变量的在线操作</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#53">5.3 异常和内核转储</a>
+    <li class="toctree-l2"><a class="reference internal" href="#53">5.3 交叉引用和全局搜索</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#54">5.4 日志和实时性</a>
+    <li class="toctree-l2"><a class="reference internal" href="#54">5.4 异常和内核转储</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#55">5.5 无报警的异常情况</a>
+    <li class="toctree-l2"><a class="reference internal" href="#55">5.5 日志和实时性</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#56">5.6 无报警的异常情况</a>
     </li>
     </ul>
                 </li>
               </ul>
               <ul>
                 <li class="toctree-l1"><a class="reference internal" href="../chapter_6/">6 实战技巧</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_7/">7 附录：电气基础</a>
                 </li>
               </ul>
       </div>
@@ -108,8 +114,8 @@
               
                 <h1 id="5">5 进阶调试</h1>
 <h2 id="51">5.1 断点、流控制及跟踪</h2>
-<p>在单片机编程中，断点（Breakpoint）是非常好用的工具，因为单片机资源较少，调试时无法在线显示变量值（会影响单片机运行速度）。而CODESYS可以在线查看程序中的变量实际值，也可以用监视窗口监视多个变量而不影响PLC的运行。此外，断点会导致轴控制急停、总线停止输出等问题，所以在实际应用中很少使用断点进行调试，但在一些For、While循环的调试中仍有必要使用断点。</p>
-<p>流控制（Flow Control）可以看到PLC执行是否经过某段代码，不需要去看代码执行条件，经过的代码（变量）会被涂绿色。但可能会导致PLC抖动增加，使用较少。</p>
+<p>在单片机和计算机编程中，断点（Breakpoint）是非常好用的工具，因为单片机资源较少，调试时无法在线显示变量值（会影响单片机运行速度）。而CODESYS可以在线查看程序中的变量实际值，也可以用监视窗口监视多个变量而不影响PLC的运行。此外，PLC处在断点会导致轴控制急停、总线停止输出等问题，所以在实际应用中很少使用断点进行调试，但在一些For、While循环的调试中仍有必要使用断点。</p>
+<p>流控制（Flow Control）可以看到PLC是否经过某段代码，经过的代码（变量）会被涂绿色。但可能会导致PLC抖动增加，使用较少。</p>
 <div class="admonition warning">
 <p class="admonition-title">在线查看的刷新周期</p>
 <p>
@@ -121,7 +127,7 @@ CODESYS查看在线值时，IDE会将当前视图内和当前激活Watch内的�
 <p>
 在使用跟踪时我们会遇到之前记录的波形被顶掉，这就是缓存大小不足的情况。可以修改trace configuration-Advanced里的Trace editor buffer size per variable大小。</p>
 </div>
-<video width="1096" controls>
+<video width="100%" controls>
   <source src="../images/5-1.mp4" type="video/mp4">
 </video>
 
@@ -145,14 +151,17 @@ iResult:=iTest;
 <p>复写操作在调试中经常遇到，我们要尽量避免一个周期内对变量的多个操作，如果在周期开始时对变量写TRUE，周期中间读取了这个变量，周期结束时对这个变量写FALSE，则在监视和TRACE中都无法观察到该变量被写过TRUE的步骤，增加调试难度。</p>
 <p>在创建总线对象后，如果地址没有被使用的地方，则会按默认优化不显示实际值，此时变量的实际值为灰色，表明该变量不是实际值。要强置设备同步IO，需要在IO映射的右下角选择使能2。</p>
 <p><img alt="" src="../images/5-2.png" /></p>
-<h2 id="53">5.3 异常和内核转储</h2>
+<h2 id="53">5.3 交叉引用和全局搜索</h2>
+<p>交叉引用（Cross References）是非常好用的工具，在变量上右键 - Browse - Display Cross References即可在交叉引用列表中查看所有对该变量操作的位置和读写类型，双击可以直接跳到对应的程序、设备或visu元素上。几乎所有的PLC软件都具有交叉引用功能。</p>
+<p>搜索功能在CODESYS软件中可定义整个项目搜索、已激活的编辑器搜索和当前编辑器搜索，这在大型项目的移植和变量替换中非常有用，也可以用于大CASE的跳转（例如在当前编辑器搜索580:可以直接跳到580步）。</p>
+<h2 id="54">5.4 异常和内核转储</h2>
 <p>CODESYS会自动监控几种异常情况，如除零、无限循环和CPU占用过高等。发生异常后PLC会完全停止在异常点，此时可以用软件登陆上即可看到问题发生的具体代码位置。此外，还可以用内核转储将异常状态存储下来，方便之后复盘问题。</p>
 <p>最常见的异常原因为除零，请在做除法运算前用LIMIT限制或IF判断，尽量避免异常的发生。此外，引用空指针或错误指针也容易导致异常，编写相关代码时应当小心谨慎。</p>
-<h2 id="54">5.4 日志和实时性</h2>
+<h2 id="55">5.5 日志和实时性</h2>
 <p>日志是检查系统问题的首要位置，您可以在Device - Log页里检查设备日志。某些总线/设备还有独立的日志。</p>
 <p>您可以在任务配置Task Configuration - Monitor中监控任务的Jitter。监控前需要在任务上手动复为一次，以避免登录、下载和刚开始运行时带来的Jitter差异。一般来说，RTE的Jitter（Min. Jitter
 和Max. Jitter）应当在±80us内，arm平台或Linux系统会差一些，极限值不应超过±150us。</p>
-<h2 id="55">5.5 无报警的异常情况</h2>
+<h2 id="56">5.6 无报警的异常情况</h2>
 <p>虽然CODESYS有上传记录、CRC等保护等功能，但某些情况下还是会发生一些意料之外的异常，且这种异常没有正确的报警显示，此处例举几个：</p>
 <ol>
 <li>使用SOFTMOTION时，在线修改过代码后轴的监控界面很可能不更新，此时要关闭轴监控界面，重新打开。</li>

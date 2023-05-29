@@ -89,6 +89,10 @@
                 <li class="toctree-l1"><a class="reference internal" href="../chapter_6/">6 实战技巧</a>
                 </li>
               </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_7/">7 附录：电气基础</a>
+                </li>
+              </ul>
       </div>
     </div>
     </nav>
@@ -157,10 +161,11 @@
 QDISC_BYPASS=1
 Linux.ProtocolFilter=3
 </code></pre>
+<p>当作为PN从站时，GSDXML设备描述文件可以从设备管理器的Fieldbuses - Profinet IO - Profinet IO Device下导出，注意有3.5.17和4.2.0两个版本可能混用，请确认实际使用的设备版本。此外，请确认CODESYS项目中的设备树和TIA项目中的设备树使用同样的Module（例如都用InOut_64_Byte）。</p>
 <div class="admonition caution">
 <p class="admonition-title">不建议使用EnableSetIpAndMask</p>
 <p>
-PLC作为PN从站时，建议固定地址而不是使用 <a href="https://help.codesys.com/webapp/_pnio_runtime_configuration_device;product=core_ProfinetIO_Configuration_Editor;version=4.1.0.0" target="_blank">EnableSetIpAndMask</a> ，即站点名称和IP都在CODESYS项目中指定。如果您需要可变的IP，请确保由上位指定的IP不会与其它网口在同一网段下，并且 <a href="https://help.codesys.com/webapp/_pnio_firewall_codesys_communication;product=core_ProfinetIO_Configuration_Editor;version=4.1.0.0" target="_blank">避免用PN从站所使用的网口登录到PLC</a> 。</p>
+PLC作为PN从站时，建议固定地址而不是使用 <a href="https://help.codesys.com/webapp/_pnio_runtime_configuration_device;product=core_ProfinetIO_Configuration_Editor;version=4.1.0.0" target="_blank">EnableSetIpAndMask</a> ，即站点名称和IP都在CODESYS项目中指定。如果您需要可变的IP，请确保由上位PLC指定的IP不会与其它网口在同一网段下，并且 <a href="https://help.codesys.com/webapp/_pnio_firewall_codesys_communication;product=core_ProfinetIO_Configuration_Editor;version=4.1.0.0" target="_blank">避免用PN从站所使用的网口登录到PLC</a> 。</p>
 </div>
 <h2 id="34-modbus-rtu">3.4 Modbus RTU的专用设置</h2>
 <p>在Linux系统中，需编辑配置文件指定COM端口分配。例如：</p>
