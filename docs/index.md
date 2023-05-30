@@ -2,9 +2,9 @@
 
 《CODESYS应用指南》
 
-本指南（开源电子书）编写目的是基础教材的增补，集合了数十位不同行业工程师实际遇到的问题，同时将一些偏门问题统一归纳，方便开发人员查询。
+本指南（开源电子书）编写目的是基础教材的增补，集合了数十位不同行业工程师实际遇到的问题，统一归纳，方便开发人员查询。
 
-作为自动化程序员，我希读者可以尝试其它PLC编程软件如西门子**TIA**、倍福**TwinCAT3**、汇川**InoProShop**等，体验一下它们之间的差异，也可以更好地理解架构和各种功能。此外，本书也不局限于CODESYS软件，关于程序和思路的大部分内容都可以扩展到InoproShop、Automation Builder、Somachine、TC3甚至是TIA上。
+作为自动化程序员，我希读者可以尝试其它PLC编程软件如西门子 **TIA** 、倍福 **TwinCAT3** 、汇川 **InoProShop** 等，体验一下它们之间的差异，也可以更好地理解架构和各种功能。此外，本书也不局限于CODESYS软件，关于程序和思路的大部分内容都可以扩展到InoproShop、Automation Builder、Somachine、TC3甚至是TIA上。
 
 如有更多问题建议在 [官方Forge](https://forge.codesys.com/forge/talk/){target=_blank} 上提问或咨询作者。
 
