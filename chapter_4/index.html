@@ -96,7 +96,7 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#_5">处理变量越界</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#axis-ref">自定义AXIS REF规避授权</a>
+    <li class="toctree-l3"><a class="reference internal" href="#axis-ref">自定义AXIS REF</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#_6">共享内存</a>
     </li>
@@ -210,7 +210,7 @@ Online Config模式适用于教学或轴的试运行，只需要添加完设备�
 <div class="admonition tip">
 <p class="admonition-title">圆形无限回转的设置</p>
 <p>
-General页中可以选择轴的模式是旋转（Modulo）或线性（Finite），这部分翻译容易造成误解。当轴驱动的对象为旋转工作台或传送带时，我们一般仍然选择运动模式为线性，这样不会有最短路径的问题。一般来说，只有使用凸轮时会将轴的运动模式设为旋转。</p>
+General页中可以选择轴的模式是旋转（Modulo）或线性（Finite），这部分翻译容易造成误解。当轴驱动的对象为旋转工作台或传送带时，我们一般仍然选择运动模式为线性，这样不会有最短路径的问题。一般来说，只有使用凸轮或电子齿轮时会将轴的运动模式设为旋转。</p>
 </div>
 <h3 id="451-ptp">4.5.1 PTP控制</h3>
 <p>在使用PTP控制之前，我先简单介绍一下控制轴运动的两种基本方式（CiA402标准）。</p>
@@ -394,7 +394,7 @@ IF xReset THEN
 END_IF
 </code></pre>
 <hr />
-<h3 id="axis-ref">自定义AXIS REF规避授权</h3>
+<h3 id="axis-ref">自定义AXIS REF</h3>
 <p>SoftMotion包含很多内容，主要有MC_xxx功能块用来控制轴；轴设备用来修改减速比，限位等参数；visu用来online config以及通用的界面展示。SoftMotion的授权是基于轴这个设备的，即授权检测在设备上而不是在功能块中。这样，我们可以创建一个变量，类型为AXIS_REF_SM3，对于库中的程序来说是一个实轴对象。要让这个对象使能并正常运行，我们需要做一些操作，如下程序。</p>
 <pre><code class="language-iecst">VAR
     Axis1:AXIS_REF_SM3;
