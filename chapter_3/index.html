@@ -197,7 +197,8 @@ sudo service codesyscontrol restart
 </code></pre>
 <p>而在windows中，若使用PCAN USB转换器，则需要编辑配置文件，在<code>[ComponentManager]</code>下添加一行<strong>Component.X=CmpPCANBasicDrv</strong>（将X更改为顺序的编号）</p>
 <h2 id="38-tcp-udp">3.8 TCP UDP的专用设置</h2>
-<p>对于TCP、UDP的底层我们不再重复介绍，在PLC的实际应用中，我们一般把TCP作为可检测、可靠的UDP使用，即把TCP当作收发包而不是流模式使用。为了达成这一点，我们一般在一个PLC周期内对一个IP、端口只做一次读和/或写操作。如果在一个周期内多次写包，则可能在协议层被自动粘包。此外，单个包的大小超过一定数量也会被自动拆包，需要在应用层做粘包操作。</p>
+<p>对于TCP、UDP的底层我们不再重复介绍，在PLC的实际应用中，我们一般把TCP作为可检测、可靠的UDP使用，即把TCP当作收发包而不是流模式使用。为了达成这一点，我们在一个PLC周期内对一个IP、端口只做一次读和/或写操作。如果在一个周期内多次写包，则在接收端可能被自动粘包。单个包的大小超过一定数量也会被拆包，需要在应用层做粘包操作。TCP的粘包操作是个伪概念，但在嵌入式和PLC设备中很好理解，部分设备会用 <code>$r$n</code> 换行符做数据包结尾，标准的Modbus TCP遇到粘包也会舍弃有效数据包后面的数据。</p>
+<p>如果有大量数据传输的需求（大于MTU，一般是1500Byte），则在两个TCP帧的处理期间<strong>有概率</strong>会和PLC任务周期碰撞，导致<strong>偶发性</strong>的拆包。例如，一个2500Byte的数据，有时候收到完整的2500Byte，有时候被分割成两段1500+1000Byte由两个PLC周期处理。这种情况下需要在应用层做粘包操作。</p>
 <p>TCP和UDP都是使用NBS库实现，在CODESYS中分为两个库，一个是官方库（Net Base Services），另一个是CAA库（CAA Net Base Services）。CAA的全称为CoDeSys Automation Alliance，现在已经很少提及，但代码非常稳定。本文档的TCP和UDP以CAA库实现，官方库的实现方法会有细微的区别。</p>
 <p>TCP、UDP的通讯实现都是纯代码的，这意味着不需要额外的授权，同样的代码可以在汇川、施耐德等基于CODESYS的PLC上通用。</p>
 <div class="admonition caution">

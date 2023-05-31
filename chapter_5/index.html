@@ -70,7 +70,7 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#52">5.2 变量的在线操作</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#53">5.3 交叉引用和全局搜索</a>
+    <li class="toctree-l2"><a class="reference internal" href="#53">5.3 交叉引用、转到定义和全局搜索</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#54">5.4 异常和内核转储</a>
     </li>
@@ -151,8 +151,9 @@ iResult:=iTest;
 <p>复写操作在调试中经常遇到，我们要尽量避免一个周期内对变量的多个操作，如果在周期开始时对变量写TRUE，周期中间读取了这个变量，周期结束时对这个变量写FALSE，则在监视和TRACE中都无法观察到该变量被写过TRUE的步骤，增加调试难度。</p>
 <p>在创建总线对象后，如果地址没有被使用的地方，则会按默认优化不显示实际值，此时变量的实际值为灰色，表明该变量不是实际值。要强置设备同步IO，需要在IO映射的右下角选择使能2。</p>
 <p><img alt="" src="../images/5-2.png" /></p>
-<h2 id="53">5.3 交叉引用和全局搜索</h2>
+<h2 id="53">5.3 交叉引用、转到定义和全局搜索</h2>
 <p>交叉引用（Cross References）是非常好用的工具，在变量上右键 - Browse - Display Cross References即可在交叉引用列表中查看所有对该变量操作的位置和读写类型，双击可以直接跳到对应的程序、设备或visu元素上。几乎所有的PLC软件都具有交叉引用功能。</p>
+<p>转到定义（Go to Definition）常用于转到变量的定义或库定位。当用于定位到变量定义时，直接在变量上右键 - Browse - Go to Definition。当用于库定位时，在类型上转到定义（如在pwr: MC_Power;的MC_Power上转到定义），即可跳转到库中对应功能或结构体，可在文档中看到功能解释。</p>
 <p>搜索功能在CODESYS软件中可定义整个项目搜索、已激活的编辑器搜索和当前编辑器搜索，这在大型项目的移植和变量替换中非常有用，也可以用于大CASE的跳转（例如在当前编辑器搜索580:可以直接跳到580步）。</p>
 <h2 id="54">5.4 异常和内核转储</h2>
 <p>CODESYS会自动监控几种异常情况，如除零、无限循环和CPU占用过高等。发生异常后PLC会完全停止在异常点，此时可以用软件登陆上即可看到问题发生的具体代码位置。此外，还可以用内核转储将异常状态存储下来，方便之后复盘问题。</p>
