@@ -18,7 +18,7 @@ TIP: **常见的文件后缀**
 
 ## 1.2 与其它PLC软件的差异性
 
-- 西门子`TIA V15+`：芯片级的硬件PLC，必须使用西门子硬件，非周期任务，总线一般支持ProfiNet、Modbus、EIP、CanOpen。IDE需要授权，RTE不需要授权。稳定性最佳，性能一般，不需UPS。  
+- 西门子`TIA V15+`：芯片级的硬件PLC，必须使用西门子硬件，非周期任务，总线支持ProfiNet、Modbus、EIP、CanOpen等。IDE需要授权，RTE不需要授权。稳定性最佳，性能一般，硬件PLC不需UPS。  
   
 - 倍福`TC3 4022+`：软件PLC，运行时可以跑在wince、wes7、win10等系统上，周期性任务，专有实时驱动，内核起源于CODESYS但有大刀阔斧的修改，开发环境基于Visual Studio。授权细分较多，每个总线和功能分别收费。插TF卡的机器稳定性略差，价格较高，性能较好，对EtherCAT支持好。WES7及以上系统需配UPS。
 
@@ -155,9 +155,9 @@ WARNING:  通常情况下，离线转移并不意味着可以从一台电脑转�
 
 ## 1.7 实时补丁和实时驱动
 
-一般来说，PLC代码的运行需要一个稳定的循环周期以明确代码执行时间及进行通讯。为了保证PLC的周期循环可以顺利执行，需要实时性。
+PLC代码的运行需要一个稳定的循环周期以明确代码执行时间及进行通讯。为了保证PLC的周期循环可以准时顺利执行，需要实时性。
 
-- 在Linux中，实时性靠Preempt-RT实时补丁保证。arm Linux的实时补丁需要自己编译，部分平台如树莓派有 [不定期更新的实时内核](https://github.com/kdoren/linux/releases){target=_blank} 。x86可以用 [LinuxCNC的镜像](http://linuxcnc.org/downloads/){target=_blank} ，卸载LinuxCNC软件即可。
+- 在Linux中，实时性靠Preempt-RT实时补丁保证。arm Linux的实时补丁需要自己编译，部分平台如树莓派有 [预编译的实时内核](https://github.com/kdoren/linux/releases){target=_blank} 。x86可以用 [LinuxCNC的镜像](http://linuxcnc.org/downloads/){target=_blank} ，卸载LinuxCNC软件即可。
 
 - 在Windows中，分为Control Win和Control RTE两种。安装IDE时会自带Control Win，一般用于仿真，不具有实时性。而Control RTE从专用安装包安装，隔离掉一个物理核心，具有实时性。
 
@@ -169,6 +169,6 @@ WARNING:  通常情况下，离线转移并不意味着可以从一台电脑转�
 
 除了以上三种RTE外，还有特殊的系统比如STM32裸机、FPGA等有特殊方法实现，具体实现方式需要咨询官方。
 
-需要注意的是，在Linux中，即使内核打了实时补丁也不保证实时性，还是需要优化CPU占用。而在Control RTE中，由于使用了隔离核心的技术，Windows系统的占用对PLC逻辑没有影响。故在中大型、多轴或复杂控制中宜选用Control RTE。
+需要注意的是，在Linux中，即使内核打了实时补丁也不保证实时性，还是需要优化CPU占用。而在Control RTE中，由于使用了隔离核心的技术，Windows系统的CPU占用对PLC逻辑没有影响。故在中大型、多轴或复杂控制中宜选用Control RTE。
 
 
