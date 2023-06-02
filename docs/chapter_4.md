@@ -19,7 +19,7 @@ NOTE: **浏览器做visu的设置**
 
 除此之外，您还可以参考 [施耐德的HMI设计指南（英文）](https://www.se.com/ww/en/download/document/VD-userguide-HMI/){target=_blank} 。VISU实现起来有一定局限性，例如一般情况下按钮文字颜色是不变的，若变化需要 [Color Variable](https://help.codesys.com/webapp/_visu_animate_color;product=core_visualization){target=_blank} 会增加复杂度。但只要思想不滑坡，还是有解决方案的。以按钮举例，设置为：
 
-1. 尺寸115\*40，圆角特定值10像素，其它尺寸等比缩放
+1. 尺寸115\*40，圆角特定值10像素，边框宽度2像素
 2. Normal State中Frame color使用RGB色(159,160,164)，Fill Color纯白。Alarm state分别是(135,210,0)和(159,160,164)。
 3. 使用渐变色（Use gradient color），颜色分别为(255,255,255)和(220,220,220)，方向Horizontal
 4. 以下全部是使用圆角矩形实现，分别是普通按钮未触发、普通按钮触发、禁用按钮未触发、禁用按钮触发、指示灯未触发、指示灯触发。
