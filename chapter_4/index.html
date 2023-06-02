@@ -150,18 +150,25 @@
 若需要窗口模式，使用<code>C:\ungoogled-chromium\chrome.exe --app=http://127.0.0.1:8080 --window-size=1040,808</code><br />
 若需要全屏模式，使用<code>C:\ungoogled-chromium\chrome.exe  --kiosk http://127.0.0.1:8080</code>  </p>
 </div>
-<p>在做visu前，建议各位读者先有一个设计思路。一般情况下，我们推荐元素不要用太多的种类，颜色可以丰富一些并用浅色，字体应用黑体或仿宋，背景可以用浅色纯色或白色90%透明度叠加的背景图片。通常情况下，我们不建议使用官方的指示灯、切换开关、码表等元素，因为图标风格不一致会有设计上的割裂感。按钮、指示灯、文字和框架都可以用矩形来做。Style选择Default或Flat Style。一般不建议在一个界面中挤满元素，而是通过分页、分框架的形式构建界面。下图中，从左至右依次为</p>
+<p>在做visu前，建议各位读者先有一个设计思路。元素不要用太多的种类，颜色可以丰富一些并用浅色，字体应用黑体或宋体，背景可以用浅色纯色或白色90%透明度叠加的背景图片。不建议使用官方的指示灯、切换开关、码表等元素，因为图标风格不一致会有设计上的割裂感。按钮、指示灯、文字和框架都可以用矩形来做。Style选择Default或Flat Style。一般不建议在一个界面中挤满元素，而是通过分页、分框架的形式构建界面。下图中，从左至右依次为</p>
 <ul>
-<li>优秀的设计：颜色搭配协调，有背景图/背景色，有选单折叠，有用户管理，时间显示，特殊按钮有特殊实现，指示灯清晰，但字体有些小。</li>
+<li>优秀的设计：颜色搭配较协调，有背景图/背景色，有选单折叠，有用户管理，时间显示，特殊按钮有特殊实现，指示灯清晰，但字体有些小。</li>
 <li>中等的设计：有菜单切换，框架架构，但色彩不协调，对比度过高，字体太细，一个框架内元素过多显得比较乱。</li>
 <li>不好的设计：颜色较单一且刺眼，按钮分隔不明显，按钮与文本框样式接近无法区分哪些可被点击。</li>
 </ul>
 <p><img alt="" src="../images/4-13.png" /> </p>
-<p>除此之外，您还可以参考 <a href="https://www.se.com/ww/en/download/document/VD-userguide-HMI/" target="_blank">施耐德的HMI设计指南（英文）</a> 。</p>
+<p>除此之外，您还可以参考 <a href="https://www.se.com/ww/en/download/document/VD-userguide-HMI/" target="_blank">施耐德的HMI设计指南（英文）</a> 。VISU实现起来有一定局限性，例如一般情况下按钮文字颜色是不变的，若变化需要 <a href="https://help.codesys.com/webapp/_visu_animate_color;product=core_visualization" target="_blank">Color Variable</a> 会增加复杂度。但只要思想不滑坡，还是有解决方案的。以按钮举例，设置为：</p>
+<ol>
+<li>尺寸115*40，圆角特定值10像素，其它尺寸等比缩放</li>
+<li>Normal State中Frame color使用RGB色(159,160,164)，Fill Color纯白。Alarm state分别是(135,210,0)和(159,160,164)。</li>
+<li>使用渐变色（Use gradient color），颜色分别为(255,255,255)和(220,220,220)，方向Horizontal</li>
+<li>以下全部是使用圆角矩形实现，分别是普通按钮未触发、普通按钮触发、禁用按钮未触发、禁用按钮触发、指示灯未触发、指示灯触发。</li>
+</ol>
+<p><img alt="" src="../images/4-14.png" /> </p>
 <hr />
 <p>我们可以在Application下添加Visualization页面，添加第一个visu时会自动添加Visulization Manager。添加visu时会有提示是否勾选VisuSymbols，这是系统内置的一些SVG图片库，可根据需求勾选。默认情况下visu不支持中文，下载后会出现乱码，可在Visualization Manager中勾选Use unicodestrings即可。</p>
 <p><img alt="" src="../images/4-1.png" /> </p>
-<p>添加的Visu默认是一个Visualization，可以理解为一个页面。如果需要做对话框可以改变visu属性为dialog。在属性中也可以设置visu的页面大小，该大小为画布大小，建议使用特定值而不是默认的自动检测。实际显示画布还会在visu管理器里根据缩放选项缩放。</p>
+<p>添加的Visu默认是一个Visualization，可以理解为一个页面。如果需要做对话框可以改变visu属性为dialog。在属性中也可以设置visu的页面大小，该大小为画布大小，建议使用特定值而不是默认的自动检测。实际显示画布还会根据缩放选项缩放，但一般建议WebVisu的缩放选项也设为固定大小（Fixed）。</p>
 <p><img alt="" src="../images/4-2.png" /> <img alt="" src="../images/4-3.png" /></p>
 <p>visu编辑界面右侧会有Visualization Toolbox（没有的话可以在View中选出来），将元素拖放到画布上即可添加。用的最多的是Basic中的矩形、图片和框架。在制作背景、图片按钮或选框时，我们还要在项目中插入ImagePool和TextPool，它们用于给图片或文本分配ID，即可在Visu中静态或动态引用。</p>
 <h2 id="42">4.2 基础元素</h2>
@@ -171,7 +178,7 @@
 <p>当作为按钮时，可将边框改大以与文本区分，在Texts中输入文字作为按钮标识，并在Input configuration中关联动作。默认指示状态关联Tap/Toggle，可在Color variables的Toggle color中取消关联。一般来说，特殊按钮使用矩形或图片来做，标准按钮使用Button来做。</p>
 <p><img alt="" src="../images/4-6.gif" /></p>
 <p>当作为数值显示时，根据文本内容可以用%s（文字）、%d（整数）、%.2f（小数）并在Text variable中关联变量，即可作为变量显示框。此外，还可以关联Text list并使用Dynamic texts制作中文动态指示。关于文本占位符可以参考 <a href="https://help.codesys.com/webapp/_visu_placeholder_with_formatting_sequence_in_a_string;product=core_visualization" target="_blank">Placeholders with Format Definition in the Output Text</a> 。</p>
-<p>当作为数值输入时，先创建一个数值显示，再在OnMouseClick中添加Write Variable即可，程序中可对输入内容二次校验及限制。</p>
+<p>当作为数值输入时，先创建一个数值显示，再在OnMouseClick中添加Write Variable即可，程序中可对输入内容二次校验及限制。数值输入也可以使用Text Field控件并使能阴影效果，与数字显示区分。</p>
 <p>除了矩形外，常用的还有Button（按钮），Image（图片），Frame（框架），Group Box（组合框），Slider（滑动按钮），Line（分割线）等。</p>
 <div class="admonition tip">
 <p class="admonition-title">背景图片</p>
@@ -181,7 +188,7 @@
 <h2 id="43">4.3 界面框架</h2>
 <p>我们可以用多个相同尺寸visu切换的方式来架构应用，这适用于较少的页面。添加按钮后，在OnMouseClick中选择Change Shown Visualization即可。</p>
 <p><img alt="" src="../images/4-7.gif" /></p>
-<p>在制作十多个页面以上的visu时，按钮切换的方式就会显得复杂了，这时候我们可以用框架（Frame）甚至是多个框架组合来做复杂的界面。作为frame时，一般建议预先规划frame尺寸，并在各个frame的属性中使用特定尺寸的画布大小。需要切换Frame时，我们可以创建一个变量关联到Switch frame variable中，然后就可以在程序里控制展示的Frame。具体到按钮上，可以选Execute ST-Code，然后将变量增加、减小或设置固定值即可。</p>
+<p>在制作十多个页面以上的visu时，按钮切换的方式就会显得复杂了，这时候我们可以用框架（Frame）甚至是多个框架组合来做复杂的界面。作为frame时，建议预先规划frame尺寸，并在各个frame的属性中使用特定尺寸的画布大小。需要切换Frame时，我们可以创建一个变量关联到Switch frame variable中，然后就可以在程序里控制展示的Frame。具体到按钮上，可以选Execute ST-Code，然后将变量增加、减小或设置固定值即可。</p>
 <p><img alt="" src="../images/4-8.png" /> <img alt="" src="../images/4-9.png" /></p>
 <h2 id="44">4.4 运动控制简介</h2>
 <p>运动控制（SoftMotion）是CODESYS的一大特色，SoftMotion通过库中的功能块计算每个周期轴应当处在的位置，并通过总线发送给驱动器以达到实时控制的目的，驱动器工作在同步位置模式（CSP）下。除了标准的SoftMotion外，CODESYS还支持SoftMotion Light，发送非实时的指令控制，驱动器工作在PP、PV等模式下。SoftMotion Light还可以通过OpenSML库或自己写逻辑实现，不需要授权，故实际应用较少。</p>
@@ -207,11 +214,11 @@ Online Config模式适用于教学或轴的试运行，只需要添加完设备�
 <li>凸轮控制：使用MC_CamIn参考CAM表控制，使用MC_GearIn进行按比例的耦合传动控制，适用于凸轮、挺杆、物料传动等。</li>
 <li>插补控制：使用SM3_CNC库中的功能块，读取NC文件并按照G代码运行，可用于简单的双、三、四轴插补数控系统，需要CNC授权。</li>
 </ol>
-<p>插入轴对象后，可以在轴的Scaling/Mapping页设置速比，常用的设置是16#1000000（16777216脉冲/转）和16#40000（262144脉冲/转），这里的脉冲都经过驱动器换算，有的驱动器反馈实际编码器值，即对应24位编码器和18位编码器。有的驱动器还会除以一个常数比如除以16（16#10）变为16#100000（1048576脉冲/转），一般来说使用24位编码器都会除以16。设置好脉冲和电机转一圈的关系后，我们就可以根据电机转一圈实际移动的距离（由丝杆螺距或齿轮分度圆半径计算得出）来填具体的减速比。填完之后，轴对象的fSetPosition、fActualPosition等参数就是实际的位置，一般以毫米为单位。</p>
+<p>插入轴对象后，可以在轴的Scaling/Mapping页设置速比，常用的设置是16#1000000（16777216脉冲/转）和16#40000（262144脉冲/转），这里的脉冲都经过驱动器换算，有的驱动器反馈实际编码器值，即对应24位编码器和18位编码器。有的驱动器还会除以一个常数比如除以16（16#10）变为16#100000（1048576脉冲/转），一般来说使用24位编码器都会除以16。设置好脉冲和电机转一圈的关系后，我们就可以根据电机转一圈实际移动的距离（由丝杆螺距或齿轮分度圆半径计算得出）来填具体的减速比。填完之后，轴对象的fSetPosition、fActualPosition等参数就是运动结构实际的位置，通常以毫米或度为单位。</p>
 <div class="admonition tip">
 <p class="admonition-title">圆形无限回转的设置</p>
 <p>
-General页中可以选择轴的模式是旋转（Modulo）或线性（Finite），这部分翻译容易造成误解。当轴驱动的对象为旋转工作台或传送带时，我们一般仍然选择运动模式为线性，这样不会有最短路径的问题。一般来说，只有使用凸轮或电子齿轮时会将轴的运动模式设为旋转。</p>
+General页中可以选择轴的模式是旋转（Modulo）或线性（Finite），这部分翻译容易造成误解。当轴驱动的对象为旋转工作台或传送带时，通常仍选择运动模式为线性，这样不会有最短路径的问题。一般来说，只有使用凸轮或电子齿轮时会将轴的运动模式设为旋转。</p>
 </div>
 <h3 id="451-ptp">4.5.1 PTP控制</h3>
 <p>在使用PTP控制之前，我先简单介绍一下控制轴运动的两种基本方式（CiA402标准）。</p>
@@ -220,10 +227,10 @@ General页中可以选择轴的模式是旋转（Modulo）或线性（Finite）�
 <p>驱动器使用PP（Profile Position）、PV（Profile Velocity）等模式为驱动器控制，EtherCAT总线不需要实时性，只要能把报文发到即可。驱动器的Modes of Operation为1或3，具体的位置控制在驱动器内实现，速度曲线一般为梯形斜坡加驱动器内置的Smooth平滑功能。</p>
 </li>
 <li>
-<p>驱动器使用CSP（Cyclic synchronous position mode），EtherCAT总线需要保证实时性，驱动器的Modes of Operation为8，位置控制主体在PLC内实现，速度曲线在CODESYS的轴对象上选择，一般为Trapezoid（一次斜坡，或称梯形）、SIN<sup>2</sup>（Sin2曲线，是S曲线的一种，不需要设定加加速度） 、Quadratic（二次曲线，标准S曲线，需要设定加加速度）三种。由于Sin2曲线或更高阶的速度曲线打断后可能会有加加速度的突变，一般用的最多的为梯形和二次。对于运动控制来说，阶数越高运动越平稳，但有个极限值，大多数运动到2次以上意义就不大了，因为驱动器控制还是会带来位置差异。实际应用中最常规的为2次曲线，最高的的为6次曲线。</p>
+<p>驱动器使用CSP（Cyclic synchronous position mode），EtherCAT总线需要保证实时性，驱动器的Modes of Operation为8，位置控制主体在PLC内实现，速度曲线在CODESYS的轴对象上选择，默认为Trapezoid（一次斜坡，或称梯形）、SIN<sup>2</sup>（Sin2曲线，是S曲线的一种，不需要设定加加速度） 、Quadratic（二次曲线，标准S曲线，需要设定加加速度）三种。由于Sin2曲线或更高阶的速度曲线打断后可能会有加加速度的突变，一般用的最多的为梯形和二次。对于运动控制来说，阶数越高运动越平稳，但有个极限值，大多数运动到2次以上意义就不大了，因为驱动器控制还是会带来位置差异。实际应用中最常规的为2次（3阶导数）曲线，最高的的为5次（6阶导数）曲线。</p>
 </li>
 </ol>
-<p>我们常说的SoftMotion是用CSP模式，位置在PLC内计算并按照实时周期发送给驱动器。一般情况下，驱动器的位置反馈只用于判断跟随误差，不会带入到位置的计算中。即使是用MC_MoveVelocity控制速度的模式，实际发送给驱动器的还是下个周期的目标位置。</p>
+<p>我们常说的SoftMotion是用CSP模式，位置在PLC内计算并按照实时周期发送给驱动器，驱动器的位置反馈只用于判断跟随误差，不会带入到位置的计算中。即使是用MC_MoveVelocity控制速度的模式，实际发送给驱动器的还是下个周期的目标位置。</p>
 <p>一个简化的位置控制代码如下，给定fTargetPosition，再给xExecute即可开始运动。对于频繁变更位置的场景，可以将xExecute不停取反：</p>
 <pre><code class="language-iecst">VAR
     mcp:MC_POWER;
@@ -242,10 +249,10 @@ mcm(Axis:=AxisT,Execute:=xExecute,Position:=fTargetPosition,Velocity:=rSpeed,Acc
 mcs(Axis:=AxisT,Execute:=NOT biEmergencyStop AND mcp.Status,Deceleration:=rAcc,Jerk:=rJerk);
 </code></pre>
 <h3 id="452">4.5.2 凸轮控制</h3>
-<p>电子凸轮由一个虚拟主轴从0度到360度按一定速度做匀速运动，从轴按照设定的凸轮位置曲线做重复运动，凸轮曲线（Cam Table）可定义主轴在任意角度时从轴的位置、速度和加速度以达到一个平滑的运动曲线。凸轮曲线不止可用于凸轮，少数情况下也可以用挺杆功能来实现挺杆运动，但一般情况下由程序判断凸轮主轴角度更易实现挺杆功能。此外，还可以将从轴也定义为虚轴，自定义缩放比例，再用SMC_ControlAxisByPos直接控制轴的位置运动。</p>
-<p>凸轮控制不同行业有不同的控制方法，此处不再示范代码。在实际程序中，需注意启停和异常时的加耦和解耦操作。</p>
+<p>电子凸轮由一个虚拟主轴按一定速度做匀速运动，从轴按照设定的凸轮位置曲线做重复运动，凸轮曲线（Cam Table）可定义主轴在任意角度时从轴的位置、速度和加速度以达到一个平滑的运动曲线。凸轮曲线不止可用于凸轮，少数情况下也可以用挺杆功能来实现挺杆运动，但由程序判断凸轮主轴角度更易实现挺杆功能。此外，还可以将从轴也定义为虚轴，自定义缩放比例或自定义算法，再用SMC_FollowPosition直接控制轴的位置运动。</p>
+<p>凸轮控制不同行业有不同的控制方法，此处不再示范代码。在实际应用中，需注意算法连续性、启停和异常时的加耦和解耦操作。</p>
 <h3 id="453">4.5.3 插补控制</h3>
-<p>CODESYS声称支持6轴插补，但大多实际应用只用到2轴、3轴插补，高于3轴需要做TCP程序，复杂度提升很多。这里简单说一下三轴龙门的程序结构。插补运动时，XYZ坐标根据G代码指示运动，选择不同的G代码文件即可做不同的复合运动。一般来说，一个支持插补运动的PLC由以下部分组成：</p>
+<p>CODESYS声称支持6轴插补，但大多实际应用只用到2轴、3轴插补，高于3轴需要做TCP程序，复杂度提升很多。这里简单说一下三轴龙门的程序结构。插补运动时，XYZ坐标根据G代码指示运动，选择不同的G代码文件即可做不同的复合运动。一个支持插补运动的PLC由以下部分组成：</p>
 <ol>
 <li>文件选择和展示（PRG_FileProvider）</li>
 <li>路径预规划（CNC_PreparePath）</li>
@@ -258,9 +265,9 @@ mcs(Axis:=AxisT,Execute:=NOT biEmergencyStop AND mcp.Status,Deceleration:=rAcc,J
 <p>路径预处理和路径执行是可以同时做的，对于上千行的G代码文件，只要有一部分预处理完成的数据即可边处理边执行。在CNC程序中，我们首先使用MC_Power功能块对X、Y、Ys、Z各轴进行上电、复位等操作，当各轴状态均正常后，通过SMC_Interpolator插补器对poqPath进行插补，得到一组数据输出，该输出为实时的各轴预期位置。之后，通过SMC_TRAFO_Gantry3将各轴数据分解为X、Y、Z三个方向，再用SMC_ControlAxisByPos对各轴进行控制。</p>
 <p>具体的G代码相关解释可以参考 <a href="https://help.codesys.com/webapp/_sm_cnc_din66025_basics;product=codesys_softmotion;version=4.6.0.0" target="_blank">DIN 66025 Fundamentals</a> </p>
 <h2 id="46">4.6 配方和报警</h2>
-<p>配方（Recipe Manager）常用于存储多组可变参数表，相当于自定义一个结构体存在保持变量表里。但与保持变量不同的是，配方可以由程序控制加载、保存，并可以保存成多个文件，可以随意加载并修改。多用于参数较多且易变的设备中。一个项目中只能有一个配方管理器，但可以有多个配方。配方中的变量必须已在程序中被定义，一般会定义一个结构体并在保持变量中声明。</p>
+<p>配方（Recipe Manager）常用于存储多组可变参数表，相当于自定义一个结构体存在保持变量表里。但与保持变量不同的是，配方可以由程序控制加载、保存，并可以保存成多个文件，可以随意加载并修改。多用于参数较多且易变的设备中。一个项目中只能有一个配方管理器，但可以有多个配方。配方中的变量必须已在程序中被定义，一般会定义一个结构体并在保持变量中声明。在批量生产的设备中，配方还可以用于保持变量的文件形式导入和导出（使用LoadAndWriteRecipe从文件读取，ReadAndSaveRecipe写入到文件），相对于保持变量管理器来说更易理解和操作。</p>
 <p>报警（Alarm Configuration）是大多数项目用不到的功能。在一些中大型或有记录需求的项目中很有用。通常勾选Archiving，并创建AlarmGroup后，可在AlarmStorage中定义保存路径，报警将会自动保存成SQLite文件，可用DB Browser for SQLite打开查看，但更常用的是直接登陆上设备，并在AlarmStorage上右键-CSV Export of Alarm Storage，后者会自动转换时间格式并添加Message信息。</p>
-<p>Data Sources Manager可用于多个PLC的报警归纳，但一般较少使用。我们更推荐使用NVL（Network Variable List）实现变量的传递，可控周期和更好的扩展性。</p>
+<p>Data Sources Manager可用于多个PLC的报警归纳，较少使用。我们更推荐使用NVL（Network Variable List）实现变量传递，有可控周期和更好的扩展性。</p>
 <h2 id="47">4.7 全局变量、保持变量和网络变量</h2>
 <div class="admonition tip">
 <p class="admonition-title">编译修饰符</p>
@@ -268,9 +275,9 @@ mcs(Axis:=AxisT,Execute:=NOT biEmergencyStop AND mcp.Status,Deceleration:=rAcc,J
 创建任意变量表时默认添加<code>{attribute 'qualified_only'}</code>修饰，该修饰会导致引用变量时要带着变量表名称，例如 <strong>GVL.iTest</strong> 或 <strong>PersistentVars.iTest2</strong> 。可根据需求移除，移除后不需要带变量表名称即可引用。</p>
 </div>
 <p>POU中VAR和END_VAR之间定义的变量为局部变量，可以在POU中读写，外部只可以读取不可以写入。如有少量写入需求，可以定义在VAR_INPUT、VAR_IN_OUT下。多数时候公共变量我们会创建一个全局变量表GVL（Global Variable List），可以从任意POU、FB中读写访问。</p>
-<p>通过创建保持变量表（Persistent Variables），变量可以在每次关机时自动保存，并在下次开机时自动加载。CODESYS仅支持一个保持变量表，您也可以在POU里定义VAR PERSISTENT（注意这里两个单词间没有下划线），也可以自动保持变量。但该方式最终编译仍然是链接到PersistentVars中，故一般推荐只在PersistentVars中定义保持变量。</p>
+<p>通过创建保持变量表（Persistent Variables），变量可以在每次关机时自动保存，并在下次开机时自动加载。CODESYS仅支持一个保持变量表，您也可以在POU里定义VAR PERSISTENT（注意这里两个单词间没有下划线），也可以自动保持变量。但该方式最终编译仍然是链接到PersistentVars中，故建议只在PersistentVars中定义保持变量。</p>
 <p>保持变量还可以通过顶层模块（View-Module打开模块列表，添加库选择AC_Persistence，添加顶层模块PersistenceManager）来自定义保存路径、保存时间和保持变量的转入转出。但由于复杂度太高，一般采用配方Recipe或自己写CSV文件读写替代。</p>
-<p>网络变量NVL（Network Variable List）适用于一个网段下两台或多台设备的通讯，由CODESYS实现底层协议，我们定义一个发送者和一个接收者即可。如果需要双向通讯，则需要在两个设备下各自创建发送和接收，多设备可以组环网。一般来说，我们会在一个项目中创建多个设备，并在POU页定义公共结构体，再在网络变量中引用结构体，即可实现环网、自适应的网络变量。相对于Modbus TCP或其他基于TCP的总线来说，网络变量可以近乎无限制的创建任意变量表，没有大小端和地址问题，比较方便。</p>
+<p>网络变量NVL（Network Variable List）适用于一个网段下两台或多台设备的通讯，由CODESYS实现底层协议，我们定义一个发送者和一个接收者即可。如果需要双向通讯，则需要在两个设备下各自创建发送和接收，多设备可以组环网。通常我们会在一个项目中创建多个设备，并在POU页定义公共结构体，再在网络变量中引用结构体，即可实现环网、自适应的网络变量。相对于Modbus TCP或其他基于TCP的总线来说，网络变量可以近乎无限制的创建任意变量表，没有大小端和地址问题，比较方便。</p>
 <h2 id="48">4.8 日期、大小端、特殊功能</h2>
 <h3 id="_1">日期</h3>
 <p>Codesys默认是从系统读取时间，系统依赖于RTC时钟。由于各厂家RTC时钟设置有差异，我们不去讨论设置时间，而是看看如何读取时间。需要在库管理器中添加<code>SysTime</code>和<code>SysTypes2 Interfaces</code>库。</p>

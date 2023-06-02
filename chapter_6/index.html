@@ -119,7 +119,7 @@
 <li>较多或多设备共用的变量归纳为结构体。例如<code>hb: ST_HANDBOX</code>，<code>cy: ST_CYLINDER</code>等。</li>
 <li>尽量使用标准的语法，例如<code>IF..THEN..ELSIF..END_IF</code>，<code>CASE..OF..END_CASE</code>等。避免使用ExST，不方便移植。</li>
 <li>需要映射到IO的变量直接在对应IO设备内关联，尽量不使用<code>AT %IX0.0</code>的直接地址引用。批量数据除外。</li>
-<li>重复变量、功能块和结构体使用<code>arTest: ARRAY[0..2] of ST_TEST</code>之类的一维到三维数组，一般不建议超过二维。</li>
+<li>重复变量、功能块和结构体使用<code>arTest: ARRAY[0..2] of ST_TEST</code>之类的一维到三维数组，通常不建议超过二维。</li>
 <li>大多数程序中都使用CASE进行分步，并做好注释。尽量避免WHILE循环。FOR循环中也需要检测最大值。</li>
 <li>善用交叉引用和全局搜索功能。这方面还是TIA好，除了交叉引用还可以用#REGION带注释定位。而CODESYS的region pragma还不如缩进。</li>
 <li>创建文件夹归纳Visu、POU、Struct和GVL等。</li>
@@ -148,7 +148,7 @@
         END_IF
 END_CASE
 </code></pre>
-<p>CASE分步时用的iState一般选INT，每个步骤一般间隔10以方便后期增减步骤，报警时做一个特殊步骤例如999。有些自动化流程中会有暂停再继续的需求，可在暂停时根据iState的值判断能否继续，对iState加1或减1操作一次让流程卡住，需要继续时恢复iState的值即可从中断步骤继续运行。</p>
+<p>CASE分步时用的iState一般选INT，每个步骤间隔10以方便后期增减步骤，报警时做一个特殊步骤例如999。有些自动化流程中会有暂停再继续的需求，可在暂停时根据iState的值判断能否继续，对iState加1或减1操作一次让流程卡住，需要继续时恢复iState的值即可从中断步骤继续运行。</p>
 <p>当使用Visu时，iState还可以用作当前步骤显示。添加一个TextList，将ID与iState关联并用作文本框的Dynamic text index即可。</p>
 <h2 id="63-visusoftmotion">6.3 基础的visu、softmotion项目</h2>
 <p><img alt="" src="../images/6-1.png" /> </p>
