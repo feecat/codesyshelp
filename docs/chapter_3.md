@@ -63,7 +63,7 @@ Adapter.1.EnableSetIpAndMask=1
 当作为PN从站时，GSDXML设备描述文件可以从设备管理器的Fieldbuses - Profinet IO - Profinet IO Device下导出，注意有3.5.17和4.2.0两个版本可能混用，请确认实际使用的设备版本。此外，请确认CODESYS项目中的设备树和TIA项目中的设备树使用同样的Module（例如都用InOut_64_Byte）。
 
 CAUTION: **不建议使用EnableSetIpAndMask**
-PLC作为PN从站时，建议固定地址，即站点名称和IP都在CODESYS项目中指定。关键点为EtherNET设备上的Adjust oerating system settings不要勾。如果您需要可变的IP，请确保由上位PLC指定的IP不会与其它网口在同一网段下，并且 [避免用PN从站所使用的网口登录到PLC](https://help.codesys.com/webapp/_pnio_firewall_codesys_communication;product=core_ProfinetIO_Configuration_Editor;version=4.1.0.0){target=_blank} 。
+PLC作为PN从站时，建议固定地址而不是使用 [EnableSetIpAndMask](https://help.codesys.com/webapp/_pnio_runtime_configuration_device;product=core_ProfinetIO_Configuration_Editor;version=4.1.0.0){target=_blank} ，即站点名称和IP都在CODESYS项目中指定。如果您需要可变的IP，请确保由上位PLC指定的IP不会与其它网口在同一网段下，并且 [避免用PN从站所使用的网口登录到PLC](https://help.codesys.com/webapp/_pnio_firewall_codesys_communication;product=core_ProfinetIO_Configuration_Editor;version=4.1.0.0){target=_blank} 。
 
 ## 3.4 Modbus RTU的专用设置
 
