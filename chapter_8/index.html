@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://www.codesyshelp.com/chapter_8/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>8 附录：博图Openness - CODESYS应用指南</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link href="../highlight.css" rel="stylesheet" />
+        <link href="../style.css" rel="stylesheet" />
+    
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "8 \u9644\u5f55\uff1a\u535a\u56feOpenness";
+        var mkdocs_page_input_path = "chapter_8.md";
+        var mkdocs_page_url = "/chapter_8/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+    <script src="../resources/highlight.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+ 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> CODESYS应用指南
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">0 引言</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_1/">1 软件安装</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_2/">2 基础知识</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_3/">3 总线的专用设置</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_4/">4 visu、softmotion、附加功能</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_5/">5 进阶调试</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_6/">6 实战技巧</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_7/">7 附录：电气基础</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">8 附录：博图Openness</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#81">8.1 简介</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#82">8.2 基础需求</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#83">8.3 模板准备</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#84">8.4 表格读取</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#84_1">8.4 程序生成</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#85-openness">8.5 Openness操作</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_1">动态加载</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#_2">加载进程</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#_3">加载设备树</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#_4">导入过程</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#86">8.6 结尾</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_9/">9 附录：P-Net</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">CODESYS应用指南</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">8 附录：博图Openness</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="8-openness">8 附录：博图Openness</h1>
+<h2 id="81">8.1 简介</h2>
+<p>西门子的产品给人印象最深刻的就是稳定性，但软件十分臃肿，内存占用高，编译和下载速度非常慢。开发环境需要授权，大多数开发人员都使用破解版，西门子也不对此做追溯限制。WinCC相似，不过终端客户会要求正版。</p>
+<p>博图不必过多介绍，作为市场占有率最高的软硬件综合厂家，很容易找到书和文档，包括Openness。但是，西门子喜欢搞一些体量庞大但实用程度不高的东西，我认为Openness也在其中。网上现有的资料，尤其是官方示例和文档有些臃肿，撰写本文时基础文档就有1900页，还没有一个像样的Getting started和Demo code。当然，我在这里也不是写范例，更多的是想提供个参考或者思路。</p>
+<p>Openness在非标自动化行业可以见到，主要原因是开发周期短、公司要求使用统一的模板。一个产线可能有数十个工站，工站有大量重复的内容，只是改一个数组序号。除此之外，气缸、传感器、伺服等执行器件需要做PlcTag、功能块调用、背景DB、组态屏和连接、显示文本等，每个项目、每个工站甚至详细到每个编号都手动输入是非常枯燥的。</p>
+<p>Openness开放的是DLL接口，建议用C#编写程序。如果对C#开发不熟悉或者您只是PLC工程师，可以尝试用 <a href="https://support.industry.siemens.com/cs/document/109773999" target="_blank"><strong>Add-In中的Export-Import插件</strong></a>  来进行导出，导出的xml可以用Python做处理，处理完了仍然用Export-Import插件导入到项目中。不过这种方式容易导致博图崩溃或无法一次性导入所有内容。</p>
+<h2 id="82">8.2 基础需求</h2>
+<p>假设我们需要做一个产线，一共10个工位。我们的模板中只有一个工位和基础FB，需要以下几项：  </p>
+<ol>
+<li>公用的、全局的DB、FB，主体结构、数组和画面，这部分属于模板固有内容，我们不对它做变更。</li>
+<li>顺序控制相关代码，手自动、单步跳步、强制模式等功能，像是Main程序，我们对它进行部分变更，例如根据工位数量生成调用结构。</li>
+<li>EPlan给出来的tag list，用于生成具体IO点位信息。tag中需要有一些标志，比如OP10_CY01_Home表示10站第一个气缸的原点。表格建议由人工二次标注，将气缸、传感器等组件用标识符分割及添加注释，方便程序筛选。</li>
+<li>模块的模板和单条内容xml，模板中包含头尾信息，单条内容包含IO关联、FB调用。</li>
+</ol>
+<p>确定并编写基础模板的同时，我们也要确定自动生成要做哪些事情，主要包含以下几项：</p>
+<ol>
+<li>从eplan taglist中生成plc变量名和注释</li>
+<li>生成程序文件和文件夹结构、背景DB、结构体</li>
+<li>生成程序内容，主要包含气缸、传感器等执行器件的关联和调用</li>
+<li>根据生成的文件树，在MAIN程序中依次调用</li>
+<li>根据需求生成HMI结构、文本、报警列表等</li>
+</ol>
+<p>除了用于PLC代码生成外，我们还可以用Openness来做库管理，可以根据项目需要用到的外设分配FB，减少资料泄露风险。</p>
+<h2 id="83">8.3 模板准备</h2>
+<p>模板准备需要用上面提到的Export-Import插件，将现有的程序导出。程序导出的是XML文件，语法是SimaticML。PLC代码建议全用SCL实现，XML还能有些可读性。导出后的文件主要是以下几类：</p>
+<ol>
+<li>程序、FB、背景DB都是SimaticML语法的XML文件。</li>
+<li>变量表、TextList属于比较特殊的XML，Textlist也可以以XLSX格式导入导出。</li>
+<li>文本列表在博图无插件上只能用XLSX，在Openness中只能用XML。</li>
+</ol>
+<p>导出的模板文件需按照实际PLC的文件树分文件夹存储，方便之后按树形结构导入，也方便生成过程。  </p>
+<p>关于模板XML的处理，我倾向于添加标识符，并在拷贝时识别标识符并替换。<br />
+例如<code>DB_Sensor.OP[C_OP10].bSignal_1 := "OP10_Sensor1"</code>的SimaticML是以下这么一长串：</p>
+<pre><code>  &lt;NewLine UId=&quot;279&quot; /&gt;
+  &lt;Blank Num=&quot;8&quot; UId=&quot;280&quot; /&gt;
+  &lt;Access Scope=&quot;GlobalVariable&quot; UId=&quot;281&quot;&gt;
+    &lt;Symbol UId=&quot;282&quot;&gt;
+      &lt;Component Name=&quot;DB_Sensor&quot; UId=&quot;283&quot;&gt;
+        &lt;BooleanAttribute Name=&quot;HasQuotes&quot; UId=&quot;284&quot;&gt;true&lt;/BooleanAttribute&gt;
+      &lt;/Component&gt;
+      &lt;Token Text=&quot;.&quot; UId=&quot;285&quot; /&gt;
+      &lt;Component Name=&quot;OP&quot; UId=&quot;286&quot;&gt;
+        &lt;Token Text=&quot;[&quot; UId=&quot;287&quot; /&gt;
+        &lt;Access Scope=&quot;GlobalConstant&quot; UId=&quot;288&quot;&gt;
+          &lt;Constant UId=&quot;289&quot;&gt;
+            &lt;ConstantValue UId=&quot;290&quot;&gt;C_OP10&lt;/ConstantValue&gt;
+          &lt;/Constant&gt;
+        &lt;/Access&gt;
+        &lt;Token Text=&quot;]&quot; UId=&quot;291&quot; /&gt;
+      &lt;/Component&gt;
+      &lt;Token Text=&quot;.&quot; UId=&quot;292&quot; /&gt;
+      &lt;Component Name=&quot;bSignal_1&quot; UId=&quot;293&quot; /&gt;
+    &lt;/Symbol&gt;
+  &lt;/Access&gt;
+  &lt;Blank UId=&quot;294&quot; /&gt;
+  &lt;Token Text=&quot;:=&quot; UId=&quot;295&quot; /&gt;
+  &lt;Blank UId=&quot;296&quot; /&gt;
+  &lt;Access Scope=&quot;GlobalVariable&quot; UId=&quot;297&quot;&gt;
+    &lt;Symbol UId=&quot;298&quot;&gt;
+      &lt;Component Name=&quot;OP10_Sensor1&quot; UId=&quot;299&quot; /&gt;
+    &lt;/Symbol&gt;
+  &lt;/Access&gt;
+  &lt;Token Text=&quot;;&quot; UId=&quot;300&quot; /&gt;
+</code></pre>
+<p>这种单个条目还是比较短的，可以在C#中写死并对内容做替换。对于带IO关联、FB调用和REGION的代码，建议将其独立出来一个xml，C#程序中用StreamReader读取模板文件，用StreamWriter写目标文件/段落。这里不太推荐XmlWriter，层级多了不太好把控。  </p>
+<h2 id="84">8.4 表格读取</h2>
+<p>plc tag格如果是csv的，可以直接用StreamReader读取再由分隔符分割。如果是xlsx，可以用OpenXML。不过，OpenXML读写效率不高，相对于Python的pandas复杂不少。此处例举一个OpenXML读取过程：</p>
+<pre><code class="language-CSharp">SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(ConfigurationFileLocation, false);
+WorkbookPart workbookPart = spreadsheetDocument.WorkbookPart;
+Sheet theSheet = workbookPart.Workbook.Descendants&lt;Sheet&gt;().FirstOrDefault(s =&gt; s.Name == &quot;Sheet1&quot;);
+WorksheetPart worksheetPart = (WorksheetPart)(workbookPart.GetPartById(theSheet.Id));
+OpenXmlReader reader = OpenXmlReader.Create(worksheetPart);
+while (reader.Read())
+{
+    if (reader.ElementType == typeof(Row))
+    {
+        reader.ReadFirstChild();
+        do
+        {
+            if (reader.ElementType == typeof(Cell))
+            {
+                Cell c = (Cell)reader.LoadCurrentElement();
+                string cellValue = &quot;&quot;;
+                if (c.DataType != null &amp;&amp; c.DataType == CellValues.SharedString)
+                {
+                    SharedStringItem ssi = workbookPart.SharedStringTablePart.SharedStringTable.Elements&lt;SharedStringItem&gt;().ElementAt(int.Parse(c.CellValue.InnerText));
+                    cellValue = ssi.InnerText;
+                }
+                else if (c.CellValue != null)
+                {
+                    cellValue = c.CellValue.InnerText;
+                }
+                // Assemble cellValue to your structure.
+            }
+        }
+    }
+}
+
+</code></pre>
+<h2 id="84_1">8.4 程序生成</h2>
+<p>SimaticML稍微有点绕，但不是很复杂。结构体、文本、程序和变量表的xml稍微有些区别，可以导出后查阅现有结构，根据现有结构生成所需要的程序。架构PLC模板时，主体结构尽量不动，只修改OPxxx的工站标号，导入时只需要对文件、文件夹和内容替换OP号。</p>
+<p>需要自动生成的外设尽量放在一起，文件越少导入速度越快。对于中小型项目，也可以在模板中规划好OP10~OP200这样的目录结构，然后根据项目需求删除不用的目录，可以极大程度节省导入时间。</p>
+<h2 id="85-openness">8.5 Openness操作</h2>
+<p>Openness整个框架还是比较复杂的，我们用到的主要是<strong>导入</strong>各类文件。</p>
+<h3 id="_1">动态加载</h3>
+<p>官方推荐对DLL做动态加载，先从注册表中获取当前可用的版本：</p>
+<pre><code class="language-CSharp">RegistryKey baseKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64);
+RegistryKey key = baseKey.OpenSubKey(@&quot;SOFTWARE\Siemens\Automation\Openness\&quot;);
+baseKey.Dispose();
+if (key != null)
+    RegistryKey key2 = key.OpenSubKey(0);
+    key2 = key2.OpenSubKey(&quot;PublicAPI\\&quot;);
+    if (key2 != null)
+    {
+        key2 = key2.OpenSubKey(names2.Last());
+        EngineeringVersion = key2.GetValue(&quot;EngineeringVersion&quot;).ToString();
+        EngineeringDllPath = key2.GetValue(&quot;Siemens.Engineering&quot;).ToString();
+    }
+}
+</code></pre>
+<p>在主程序中加载DLL解析器 <code>AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;</code> ，解析以下几个DLL：</p>
+<ol>
+<li>Siemens.Engineering.Contract.dll</li>
+<li>Siemens.Engineering.ClientAdapter.Interfaces.dll</li>
+<li>Siemens.Engineering.ClientAdapter.MarshallerHook.dll</li>
+<li>Siemens.Engineering.ClientAdapter.MarshallerHook.Hmi.dll</li>
+<li>Siemens.Engineering.dll</li>
+</ol>
+<p>此处给出一个解析方式，其它DLL类似，不同版本需求可能不同，debug时会报错。DLL路径可以在博图安装目录里搜索。</p>
+<pre><code class="language-CSharp">private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+{
+    int index = args.Name.IndexOf(',');
+    if (index == -1)
+        return null;
+
+    string name = args.Name.Substring(0, index);
+
+    if (name == &quot;Siemens.Engineering.Contract&quot;)
+    {
+        string fullPath = string.Format(&quot;C:\\Program Files\\Siemens\\Automation\\Portal {0}\\Bin\\PublicAPI\\Siemens.Engineering.Contract.dll&quot;, tiaVersion);
+        if (File.Exists(fullPath))
+            return Assembly.LoadFrom(fullPath);
+    }
+}
+</code></pre>
+<p>虽然DLL是动态加载的，我们仍然要在VS中把Siemens.Engineering和Siemens.Engineering.Hmi拖到引用里，然后把复制本地改False。不然写代码时没加载到IDE的也就没有相关链接。</p>
+<h3 id="_2">加载进程</h3>
+<p>在运行的进程里搜索博图实例，即打开一个博图IDE显示一个。我们简化一点，只考虑已运行单实例并且打开模板文件的情况。</p>
+<pre><code class="language-CSharp">TiaPortal tiaPortal = null;
+foreach (TiaPortalProcess tiaPortalProcess in TiaPortal.GetProcesses())
+{
+    TiaPortalProcess p = TiaPortal.GetProcess(tiaPortalProcess.Id);
+    tiaPortal = p.Attach();
+    if (tiaPortal != null)
+    {
+        return;
+    }
+}
+
+ProjectComposition projects = tiaPortal.Projects;
+if (projects.Count == 0)
+{
+    return;
+}
+project = tiaPortal.Projects[0];
+</code></pre>
+<h3 id="_3">加载设备树</h3>
+<p>设备树主要用于区分PLC、HMI和总线设备，我们在这里提取出PLC和HMI，只考虑单PLC和单HMI的情况。需要注意的是，PLC使用TypeIdentifier可以识别出CPU型号，而HMI的标识类似订货号，不够明确，这里推荐在模板中增加标识符的方式来识别。</p>
+<pre><code class="language-CSharp">PlcSoftware software = null;
+HmiTarget hmiTarget = null;
+foreach (Device device in project.Devices)
+{
+    if (device.TypeIdentifier == null)
+    {
+        continue;
+    }
+    if (device.TypeIdentifier == &quot;System:Device.S71500&quot;)
+    {
+        foreach (DeviceItem item in device.DeviceItems)
+        {
+            if (item.Classification.ToString() == &quot;CPU&quot;)
+            {
+                //load software
+                SoftwareContainer softwareContainer = ((IEngineeringServiceProvider)item).GetService&lt;SoftwareContainer&gt;();
+                if (softwareContainer != null)
+                {
+                    software = softwareContainer.Software as PlcSoftware;
+                }
+            }
+        }
+    }else if (device.DeviceItems.Count &gt; 0)
+    {
+        //HMI not have Classification, only use name to check it.
+        foreach (DeviceItem item in device.DeviceItems)
+        {
+            if (item.Name.ToString().Contains(&quot;HMI_TP&quot;))
+            {
+                //load software
+                SoftwareContainer softwareContainer = ((IEngineeringServiceProvider)item).GetService&lt;SoftwareContainer&gt;();
+                if (softwareContainer != null)
+                {
+                    hmiTarget = softwareContainer.Software as HmiTarget;
+                    hmiTargets.Add(hmiTarget);
+                }
+            }
+        }
+    }
+}
+</code></pre>
+<h3 id="_4">导入过程</h3>
+<p>导入过程参考 <a href="https://github.com/BrunoSantos-Git/TiaPortalOpenness/blob/master/Visual%20Studio/TiaOpennessHelper/Import.cs">TiaOpennessHelper/Improt.cs</a> ，TiaOpennessHelper里还有很多功能可以参考。</p>
+<p>如果先导入了一个程序，但其引用的DB还未导入则会报错。可以加入<code>SWImportOptions.IgnoreMissingReferencedObjects</code>标识符以忽略错误，例如：</p>
+<pre><code class="language-CSharp">if (Path.GetExtension(filePath).Equals(&quot;.xml&quot;))
+    (destination as PlcBlockGroup).Blocks.Import(fileInfo, importOption, SWImportOptions.IgnoreMissingReferencedObjects);
+</code></pre>
+<h2 id="86">8.6 结尾</h2>
+<p>Openness带Open但还不是非常开放，有不少元素修改不了或者需要花费精力研究博图底层架构，目前阶段建议只作为小工具替代繁琐的复制粘贴改序号。</p>
+<p>程序员常用的git、copilot等工具在自动化行业还没有推开，甚至代码格式化在很多ide上都不完善。期待未来可以用ai集成编程，自然语言对话的辅助编程才是自动化调试的最终形态。</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../chapter_7/" class="btn btn-neutral float-left" title="7 附录：电气基础"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../chapter_9/" class="btn btn-neutral float-right" title="9 附录：P-Net">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../chapter_7/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../chapter_9/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

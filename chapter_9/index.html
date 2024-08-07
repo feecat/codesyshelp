@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://www.codesyshelp.com/chapter_9/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>9 附录：P-Net - CODESYS应用指南</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link href="../highlight.css" rel="stylesheet" />
+        <link href="../style.css" rel="stylesheet" />
+    
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "9 \u9644\u5f55\uff1aP-Net";
+        var mkdocs_page_input_path = "chapter_9.md";
+        var mkdocs_page_url = "/chapter_9/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+    <script src="../resources/highlight.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+ 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> CODESYS应用指南
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">0 引言</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_1/">1 软件安装</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_2/">2 基础知识</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_3/">3 总线的专用设置</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_4/">4 visu、softmotion、附加功能</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_5/">5 进阶调试</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_6/">6 实战技巧</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_7/">7 附录：电气基础</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_8/">8 附录：博图Openness</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">9 附录：P-Net</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#91-p-net">9.1 P-Net简介</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#92">9.2 确定需求</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#93">9.3 平台搭建</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#94-sample">9.4 Sample例程</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#95">9.5 例程之上的修改</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#96">9.6 结尾</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">CODESYS应用指南</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">9 附录：P-Net</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="9-p-net">9 附录：P-Net</h1>
+<h2 id="91-p-net">9.1 P-Net简介</h2>
+<p>P-Net是rt-labs开发的一个ProfiNET从站协议栈，用C语言编写，实现了一致性A和B，RT，多网口等。<br />
+在此之前，想要实现ProfiNET从站必须使用CODESYS等付费协议栈或者NetX等专用芯片。</p>
+<div class="admonition warning">
+<p class="admonition-title">开源协议</p>
+<p>
+P-Net是双协议开源，即对于开源爱好者采用GPLv3，而商业使用需要购买商业许可证。<br />
+截至编写本文时，商业许可证价格最低为3000€报名费+490€年费+10€设备费（有阶梯价），例如2年生产1000台设备，费用大概为11200€，折合人民币不到9万，平均89/台设备。</p>
+</div>
+<p>官方的开源存储库在 <a href="https://github.com/rtlabs-com/p-net">rtlabs-com/p-net</a> ，默认分支是public，主要是删除了demo程序。之前的代码可在master分支里看到。<br />
+p-net有一个第三方衍生的c++版本叫做 <a href="https://github.com/langmo/profipp">profipp</a> ，c++编程、自动生成GSDML。不过缺少文档，注释也少，有点看不懂。<br />
+还有个三方移植在H723ZG上的，叫做 <a href="https://github.com/andre-lost-a-pig/p-net-stm32">p-net-stm32</a> 。淘宝闲鱼有人卖基于stm32+w5500+交换机的，但固件不开源。  </p>
+<p>本文主要讨论官方p-net在linux平台下的应用。  </p>
+<h2 id="92">9.2 确定需求</h2>
+<p>P-Net支持的功能很丰富，但我们的需求很简单，只需要和西门子建立通讯、周期稳定即可。要求主要是如下几点：  </p>
+<ul>
+<li>可从博图上设置名称和ip</li>
+<li>实时级别RT，单网口，周期4ms  </li>
+<li>InOut 64 Byte，类似codesys做从站</li>
+<li>可扩展模块，为将来升级做准备</li>
+</ul>
+<p>确定好需求后，我们开始看p-net内置的sample，并尝试跑起来。</p>
+<h2 id="93">9.3 平台搭建</h2>
+<p>系统建议debian12，打preempt补丁。可以参考 <a href="https://linuxcnc.org/">LinuxCNC</a> 。<br />
+安装依赖项：<code>sudo apt install cmake git</code><br />
+IDE推荐QT：<code>sudo apt install qt6-base-dev qtcreator</code>  </p>
+<p>apt源里的qtcreator版本一般都比较老，要新版的可以到 <a href="https://github.com/qt-creator/qt-creator/releases">qt-creator/releases</a> 下载最新版，不过相关依赖例如gdb、libxcb等需要手动安装。还需要注意的是虚拟机里可能会有问题，建议在物理机上跑。  </p>
+<h2 id="94-sample">9.4 Sample例程</h2>
+<p>在编译Sample例程之前，我们要处理一下git问题。以下源代码基于 <a href="https://github.com/rtlabs-com/p-net/tree/master">p-net/tree/master</a> 。<br />
+P-Net依赖很少，但osal和googletest在国内环境不太好git。我们需要对原始cmake文件做一点小小的修改。  </p>
+<ol>
+<li>从 <a href="https://github.com/rtlabs-com/p-net/tree/master">p-net/tree/master</a> 下载P-Net主体源代码，解压到设备中，目录结构<strong>~/profinet/p-net</strong>。  </li>
+<li>从 <a href="https://github.com/rtlabs-com/osal">rtlabs-com/osal</a> 下载osal源代码，解压到p-net源码根文件夹中，目录名osal（~/profinet/p-net/osal）。  </li>
+<li>编辑CMakeLists.txt，屏蔽46行的<code>#include(AddOsal)</code>，并在228行添加<code>add_subdirectory (osal)</code></li>
+</ol>
+<p>这样就可以跳过osal的git。然后我们正常build：</p>
+<pre><code>cd ./profinet
+cmake -B build -S p-net -DBUILD_TESTING=OFF -DUSE_SCHED_FIFO=ON
+</code></pre>
+<p>DBUILD_TESTING=OFF可以跳过gtest依赖，我们作为使用者也不需要测试环境。FIFO调度在rt系统上有助于增加实时性。<br />
+编译完成后，我们可以找到~/profinet/build文件夹，里面就是编译后的二进制文件了。<br />
+可以<code>sudo ~/profinet/build/pn_dev -h</code>打印信息。通常使用<code>sudo ~/profinet/build/pn_dev -i eth0</code>来指定网口运行。<br />
+例程的GSDML文件在<code>~/profinet/p-net/samples/pn_dev</code>下。  </p>
+<h2 id="95">9.5 例程之上的修改</h2>
+<p>作为应用工程师，我们尽量在已有代码上做修改。P-Net模块很适合作为一个独立的后台程序运行，对外使用ProfiNET通讯，对内使用SharedMemory通讯。我们采用和CODESYS一致的POSIX方法，具体可以参考4.8章节的共享内存示例代码，数据的处理在<code>sampleapp_common.c</code>的<code>app_cyclic_data_callback</code>中，按实际需求编写用户代码。  </p>
+<p>在正常通过终端编译之后，用QtCreator加载CMakeLists.txt，并将现有build文件夹作为生成目录，勾选Run as root user。后面就可以用QtCreator开发。<br />
+GSDML只能手动修改，不过不复杂，主要是改Vendor、Device信息和插槽，这里举例把0x130作为8个usint输入：</p>
+<pre><code>         &lt;ModuleList&gt;
+            &lt;ModuleItem ID=&quot;IDM_30&quot; ModuleIdentNumber=&quot;0x00000030&quot;&gt;
+               &lt;ModuleInfo&gt;
+                  &lt;Name TextId=&quot;TOK_Name_Module_I8&quot;/&gt;
+                  &lt;InfoText TextId=&quot;TOK_InfoText_Module_I8&quot;/&gt;
+                  &lt;HardwareRelease Value=&quot;1.0&quot;/&gt;
+                  &lt;SoftwareRelease Value=&quot;1.0&quot;/&gt;
+               &lt;/ModuleInfo&gt;
+               &lt;VirtualSubmoduleList&gt;
+                  &lt;VirtualSubmoduleItem ID=&quot;IDSM_130&quot; SubmoduleIdentNumber=&quot;0x0130&quot; MayIssueProcessAlarm=&quot;true&quot;&gt;
+                     &lt;IOData&gt;
+                        &lt;Input Consistency=&quot;All items consistency&quot;&gt;
+                           &lt;DataItem DataType=&quot;Unsigned8&quot; TextId=&quot;TOK_Input_DataItem_1&quot; UseAsBits=&quot;false&quot; /&gt;
+                           &lt;DataItem DataType=&quot;Unsigned8&quot; TextId=&quot;TOK_Input_DataItem_2&quot; UseAsBits=&quot;false&quot; /&gt;
+                           &lt;DataItem DataType=&quot;Unsigned8&quot; TextId=&quot;TOK_Input_DataItem_3&quot; UseAsBits=&quot;false&quot; /&gt;
+                           &lt;DataItem DataType=&quot;Unsigned8&quot; TextId=&quot;TOK_Input_DataItem_4&quot; UseAsBits=&quot;false&quot; /&gt;
+                           &lt;DataItem DataType=&quot;Unsigned8&quot; TextId=&quot;TOK_Input_DataItem_5&quot; UseAsBits=&quot;false&quot; /&gt;
+                           &lt;DataItem DataType=&quot;Unsigned8&quot; TextId=&quot;TOK_Input_DataItem_6&quot; UseAsBits=&quot;false&quot; /&gt;
+                           &lt;DataItem DataType=&quot;Unsigned8&quot; TextId=&quot;TOK_Input_DataItem_7&quot; UseAsBits=&quot;false&quot; /&gt;
+                           &lt;DataItem DataType=&quot;Unsigned8&quot; TextId=&quot;TOK_Input_DataItem_8&quot; UseAsBits=&quot;false&quot; /&gt;
+                        &lt;/Input&gt;
+                     &lt;/IOData&gt;
+                     &lt;ModuleInfo&gt;
+                        &lt;Name TextId=&quot;TOK_Name_Module_I8&quot;/&gt;
+                        &lt;InfoText TextId=&quot;TOK_InfoText_Module_I8&quot;/&gt;
+                     &lt;/ModuleInfo&gt;
+                  &lt;/VirtualSubmoduleItem&gt;
+               &lt;/VirtualSubmoduleList&gt;
+            &lt;/ModuleItem&gt;
+</code></pre>
+<p>记得要同步修改<code>app_gsdml.h</code>中的信息和size，以及<code>sampleapp_common.c</code>中的数据处理。</p>
+<h2 id="96">9.6 结尾</h2>
+<p>有点可惜的是P-Net还不是真正的开源，收费模式和QT类似。现有demo的功能还是稍微复杂了点，能像igh那样作为独立服务就好了。</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../chapter_8/" class="btn btn-neutral float-left" title="8 附录：博图Openness"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../chapter_8/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
