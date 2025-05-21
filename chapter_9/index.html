@@ -79,7 +79,7 @@
                 </li>
               </ul>
               <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href="./">9 附录：P-Net</a>
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">9 附录：P-Net</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#91-p-net">9.1 P-Net简介</a>
     </li>
@@ -98,6 +98,10 @@
               </ul>
               <ul>
                 <li class="toctree-l1"><a class="reference internal" href="../chapter_10/">10 附录：IgH与Ruckig</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_11/">11 附录：PNDriver</a>
                 </li>
               </ul>
       </div>
@@ -167,6 +171,12 @@ cmake -B build -S p-net -DBUILD_TESTING=OFF -DUSE_SCHED_FIFO=ON
 编译完成后，我们可以找到~/profinet/build文件夹，里面就是编译后的二进制文件了。<br />
 可以<code>sudo ~/profinet/build/pn_dev -h</code>打印信息。通常使用<code>sudo ~/profinet/build/pn_dev -i eth0</code>来指定网口运行。<br />
 例程的GSDML文件在<code>~/profinet/p-net/samples/pn_dev</code>下。  </p>
+<div class="admonition info">
+<p class="admonition-title">混杂和多播</p>
+<p>
+P-Net在linux平台上也使用SOCK_RAW，具体代码在 <code>src/ports/linux/pnal_eth.c</code> 下，默认启用了多播<code>IFF_ALLMULTI</code>但未启用混杂<code>IFF_PROMISC</code> 。<br />
+根据实际调试情况，某些系统、驱动可能需要启用混杂模式才可以正常接收PNIO_PS帧。</p>
+</div>
 <h2 id="95">9.5 例程之上的修改</h2>
 <p>作为应用工程师，我们尽量在已有代码上做修改。P-Net模块很适合作为一个独立的后台程序运行，对外使用ProfiNET通讯，对内使用SharedMemory通讯。我们采用和CODESYS一致的POSIX方法，具体可以参考4.8章节的共享内存示例代码，数据的处理在<code>sampleapp_common.c</code>的<code>app_cyclic_data_callback</code>中，按实际需求编写用户代码。  </p>
 <p>在正常通过终端编译之后，用QtCreator加载CMakeLists.txt，并将现有build文件夹作为生成目录，勾选Run as root user。后面就可以用QtCreator开发。<br />

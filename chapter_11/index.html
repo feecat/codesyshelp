@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://www.codesyshelp.com/chapter_11/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>11 附录：PNDriver - CODESYS应用指南</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link href="../highlight.css" rel="stylesheet" />
+        <link href="../style.css" rel="stylesheet" />
+    
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "11 \u9644\u5f55\uff1aPNDriver";
+        var mkdocs_page_input_path = "chapter_11.md";
+        var mkdocs_page_url = "/chapter_11/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+    <script src="../resources/highlight.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+ 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> CODESYS应用指南
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">0 引言</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_1/">1 软件安装</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_2/">2 基础知识</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_3/">3 总线的专用设置</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_4/">4 visu、softmotion、附加功能</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_5/">5 进阶调试</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_6/">6 实战技巧</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_7/">7 附录：电气基础</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_8/">8 附录：博图Openness</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_9/">9 附录：P-Net</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_10/">10 附录：IgH与Ruckig</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">11 附录：PNDriver</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#111">11.1 简介</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#112">11.2 解密</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#113">11.3 配置环境和编译</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#114-pnconfiglib">11.4 使用PNConfigLib</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#115-pndriver">11.5 PNDriver的修改</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#116">11.6 结尾</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">CODESYS应用指南</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">11 附录：PNDriver</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="11-pndriver">11 附录：PNDriver</h1>
+<h2 id="111">11.1 简介</h2>
+<p>在之前的文章中，我们聊过了EtherCAT主站和ProfiNET从站。EtherCAT从站需要专用ASIC如LAN9253、AX58200、XMC4300等实现，底层还是倍福的SSC。而ProfiNET主站一直都没有开源实现。</p>
+<p>西门子官方其实是有ProfiNET主站和从站代码的，叫做PNDriver，与之配套的还有PNConfigLib。目前最新版本为 <a href="https://support.industry.siemens.com/cs/document/109974538/">PNDriver3.2、PNConfigLib1.5</a> 。</p>
+<p>PNDriver一直在更新迭代，但其主要为CP1625客户提供，需要密码才可以解压。它既可以作为主站，也可以作为从站使用。源代码可以跑在CP1625、Windows和Linux上。</p>
+<h2 id="112">11.2 解密</h2>
+<p>在PNDriver的早期版本中，源代码被封装为了ISO文件再经过加密，而最近的版本直接通过ZIP压缩并加密，这导致了一个漏洞可以被利用，基本原理是通过 <a href="https://github.com/kimci86/bkcrack">bkcrack</a> 检测ZIP中仅压缩且未混淆的文件，通过明文去恢复内部密钥，再通过密钥对ZIP文件解密。</p>
+<p>要进行解密，我们需要先在压缩包内找到算法为<strong>ZipCrypto Store</strong>的文件，例如<code>PNDriver_03.02\contrib\Debian_Packages\pndevdrv-dkms_03.02.00.00.00.01.00.15_amd64.deb</code>。然后，我们需要知道这个文件的一段明文，deb文件通常以以下字符开头，注意换行符为LF：</p>
+<pre><code class="language-bash">!&lt;arch&gt;
+debian-binary
+</code></pre>
+<p>之后就可以照着bkcrack的介绍进行密钥恢复了，恢复出来的是内部密钥，只可以将zip压缩包的密码解除，要想获取原始密码还是有一定难度，不在本文讨论范围。拿到源代码后，我们就可以开始测试了。本文之后主要讨论Linux（LinuxCNC）下的ProfiNET主站应用，带一个V90从站跑RT（非实时）。</p>
+<h2 id="113">11.3 配置环境和编译</h2>
+<p>PNDriver的基础文档做的很漂亮，我们主要看Quick Start for Linux Native这部分。我习惯使用VSCode，安装和配置照着文档做就可以。</p>
+<p>Linux默认的端口范围不满足，可通过<code>sudo sh -c 'echo "49152 65535" &gt; /proc/sys/net/ipv4/ip_local_port_range'</code>临时修改。</p>
+<p>建议首次编译<code>pn_driver\src\examples\ioc\test_app</code>，ioc表示controller（主站）。test_app中已有部分基础代码，运行之后，通过2、5、9、10来依次选择网卡、启动主站、连接从站。主站可以启动就没问题了，默认的从站是ET200SP我们没有，需要换成V90。</p>
+<h2 id="114-pnconfiglib">11.4 使用PNConfigLib</h2>
+<p>之前我提到过西门子的一大特色是稳定，另一大特色是臃肿。PNConfigLib就是一个典型。由于GSDML设备描述文件无法直接被PNDriver使用，当存在多个从站时，需要对从站分配IP、检查拓扑结构，这部分的描述文件转换过程被做到了PNConfigLib中，即通过PNConfigLib生成中间层xml文件，再由PNDriver读取并驱动从站。</p>
+<p>PNConfigLib的技术栈用的是VC++混合C#和.net 8.0，所以推荐在windows系统下操作。我们需要参考<code>PNConfigLib_01.05\buildtool\README.md</code>文档，对源代码进行编译，需要vs2022和.net开发环境。编译之后，可执行文件在<code>PNConfigLib_01.05\bin\Release\x64\PNConfigLibRunner.exe</code> 。</p>
+<p>编译出来的文件不带界面，还是需要通过命令行操作，操作的文档在<code>PNConfigLib_01.05\examples\Readme.md</code>。对于我们测试来说，我们只用basic configuration，即如下指令：</p>
+<pre><code>.\PNConfigLibRunner -c &quot;..\..\..\examples\01_Basic_Configuration\Configuration.xml&quot; -l &quot;..\..\..\examples\01_Basic_Configuration\ListOfNodes.xml&quot;
+</code></pre>
+<p>执行后，将自动新建文件夹<code>PNConfigLib Output - [日期时间]</code>，里面的<code>PROFINET Driver_PN_Driver_1.xml</code>就是PNDriver需要的中间描述层。</p>
+<p>本文的目标是带V90伺服，所以我们还需要将V90的GSDML拷到<code>examples\GSDMLs</code>下，并修改01_Basic_Configuration下的两个xml。其中，<strong>Configuration.xml</strong>存放站名、插槽交互，主体内容如下：</p>
+<pre><code>&lt;Configuration schemaVersion=&quot;1.0&quot;
+               ConfigurationID=&quot;ConfigurationID&quot;
+               ConfigurationName=&quot;ConfigurationName&quot;
+               ListOfNodesRefID=&quot;ListOfNodesID&quot;
+               xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+               xmlns=&quot;http://www.siemens.com/Automation/PNConfigLib/Configuration&quot;
+               xsi:schemaLocation=&quot;http://www.siemens.com/Automation/PNConfigLib/Configuration Configuration.xsd&quot;&gt;
+    &lt;Devices&gt;
+        &lt;CentralDevice DeviceRefID=&quot;PN_Driver_1&quot;&gt;
+            &lt;CentralDeviceInterface InterfaceRefID=&quot;PN_Driver_1_Interface&quot;&gt;
+                &lt;EthernetAddresses&gt;
+                    &lt;IPProtocol&gt;
+                        &lt;SetInTheProject IPAddress=&quot;100.168.0.1&quot;
+                                         SubnetMask=&quot;255.255.255.0&quot;
+                                         RouterAddress=&quot;100.168.0.100&quot; /&gt;
+                        &lt;!--&lt;SetDirectlyAtTheDevice/&gt;--&gt;
+                    &lt;/IPProtocol&gt;
+                    &lt;PROFINETDeviceName&gt;
+                        &lt;PNDeviceName&gt;pndriver1&lt;/PNDeviceName&gt;
+                    &lt;/PROFINETDeviceName&gt;
+                &lt;/EthernetAddresses&gt;
+                &lt;AdvancedOptions&gt;
+                    &lt;RealTimeSettings&gt;
+                        &lt;IOCommunication SendClock=&quot;1&quot; /&gt;
+                    &lt;/RealTimeSettings&gt;
+                &lt;/AdvancedOptions&gt;
+            &lt;/CentralDeviceInterface&gt;
+        &lt;/CentralDevice&gt;
+        &lt;DecentralDevice DeviceRefID=&quot;V90_1&quot;&gt;
+            &lt;DecentralDeviceInterface InterfaceRefID=&quot;V90_1_Interface&quot;&gt;
+                &lt;EthernetAddresses&gt;
+                    &lt;IPProtocol&gt;
+                        &lt;SetInTheProject IPAddress=&quot;100.168.0.2&quot;
+                                         SubnetMask=&quot;255.255.255.0&quot;/&gt;
+                    &lt;/IPProtocol&gt;
+                    &lt;PROFINETDeviceName DeviceNumber=&quot;1&quot;&gt;
+                        &lt;PNDeviceName&gt;sinamics-v90-pn&lt;/PNDeviceName&gt;
+                    &lt;/PROFINETDeviceName&gt;
+                &lt;/EthernetAddresses&gt;
+            &lt;/DecentralDeviceInterface&gt;
+            &lt;!-- GSDML reference of the plugged module: --&gt;
+            &lt;Module ModuleID=&quot;DRIVE_OBJECT&quot;
+                    SlotNumber=&quot;1&quot;
+                    GSDRefID=&quot;IDM_DRIVE&quot;&gt;
+                &lt;Submodule SubmoduleID=&quot;Module_Access_Point&quot;
+                           SubslotNumber=&quot;1&quot;
+                           GSDRefID=&quot;IDS_MAP&quot;&gt;
+                &lt;/Submodule&gt;
+                &lt;Submodule SubmoduleID=&quot;without_PROFIsafe&quot;
+                           SubslotNumber=&quot;2&quot;
+                           GSDRefID=&quot;IDS_NOSAFE&quot;&gt;
+                &lt;/Submodule&gt;
+                &lt;Submodule SubmoduleID=&quot;SIEMENS_telegram_111_PZD_12_12&quot;
+                           SubslotNumber=&quot;3&quot;
+                           GSDRefID=&quot;IDS_TEL111&quot;&gt;
+                    &lt;IOAddresses&gt;
+                        &lt;InputAddresses StartAddress=&quot;100&quot; /&gt;
+                        &lt;OutputAddresses StartAddress=&quot;100&quot; /&gt;
+                    &lt;/IOAddresses&gt; 
+                &lt;/Submodule&gt;
+                &lt;Submodule SubmoduleID=&quot;Supplementary_telegram_750_PZD_3_1&quot;
+                           SubslotNumber=&quot;4&quot;
+                           GSDRefID=&quot;IDS_TEL750&quot;&gt;
+                    &lt;IOAddresses&gt;
+                        &lt;InputAddresses StartAddress=&quot;200&quot; /&gt;
+                        &lt;OutputAddresses StartAddress=&quot;200&quot; /&gt;
+                    &lt;/IOAddresses&gt; 
+                &lt;/Submodule&gt;
+            &lt;/Module&gt;
+        &lt;/DecentralDevice&gt;
+    &lt;/Devices&gt;
+&lt;/Configuration&gt;
+</code></pre>
+<p>这个文件的插槽GSDRefID需要去GSDML里面查，排序可以参考codesys或博图，GSDML里也有允许顺序。之后，还需要修改<strong>ListOfNodes.xml</strong>，如下：</p>
+<pre><code>&lt;ListOfNodes schemaVersion=&quot;1.0&quot;
+             ListOfNodesID=&quot;ListOfNodesID&quot;
+             xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+             xmlns=&quot;http://www.siemens.com/Automation/PNConfigLib/ListOfNodes&quot;
+             xsi:schemaLocation=&quot;http://www.siemens.com/Automation/PNConfigLib/ListOfNodes ListOfNodes.xsd&quot;&gt;
+    &lt;PNDriver DeviceID=&quot;PN_Driver_1&quot;
+              DeviceVersion=&quot;v3.1&quot;
+              DeviceName=&quot;PROFINET Driver&quot;&gt;
+        &lt;Interface InterfaceID=&quot;PN_Driver_1_Interface&quot;
+                   InterfaceType=&quot;Linux Native&quot;
+                   InterfaceName=&quot;PN_Driver_1_Interface&quot; /&gt;
+    &lt;/PNDriver&gt;
+    &lt;DecentralDevice DeviceID=&quot;V90_1&quot;
+                     GSDPath=&quot;../GSDMLs/GSDML-V2.32-Siemens-Sinamics_V90-20190415.xml&quot;
+                     GSDRefID=&quot;IDD_V90PN-V4.7&quot;
+                     DeviceName=&quot;V90_1&quot;&gt;
+        &lt;Interface InterfaceID=&quot;V90_1_Interface&quot;
+                   InterfaceName=&quot;V90_1_Interface&quot; /&gt;
+    &lt;/DecentralDevice&gt;
+&lt;/ListOfNodes&gt;
+</code></pre>
+<p>这样，再通过PNConfigLibRunner生成出来PROFINET Driver_PN_Driver_1.xml，我们就可以拿到PNDriver中使用了。</p>
+<h2 id="115-pndriver">11.5 PNDriver的修改</h2>
+<p>我们测试只要跑通总线即可，这样只需要将中间XML拷到<code>examples/ioc/test_app/linux_native/PNDriverBase_TestApp/</code>，再修改pnd_test.c的init_paths部分即可。</p>
+<p>需要注意的是vscode需要以管理员权限运行，通过<code>sudo code --no-sandbox --user-data-dir="./temp"</code>启动vscode，安装C++、CMAKE等插件就可以编译。</p>
+<p>PNDriver不太容易看出来总线的状态和交互，可以结合WireShark抓包调试。通讯成功后，就可以把TestApp按需求重写。</p>
+<h2 id="116">11.6 结尾</h2>
+<p>少量的ProfiNET主站需求推荐用CODESYS/TwinCAT来做，有界面和诊断，调试起来很简单。PNDriver则适合于批量产品或特定软件研发，它还支持IRT同步（仅CP1625）和作为从站使用，具体参考示例代码。</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../chapter_10/" class="btn btn-neutral float-left" title="10 附录：IgH与Ruckig"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../chapter_10/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

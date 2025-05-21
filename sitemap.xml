@@ -2,57 +2,62 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://www.codesyshelp.com/</loc>
-         <lastmod>2024-10-30</lastmod>
+         <lastmod>2025-05-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.codesyshelp.com/chapter_1/</loc>
-         <lastmod>2024-10-30</lastmod>
+         <lastmod>2025-05-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.codesyshelp.com/chapter_10/</loc>
-         <lastmod>2024-10-30</lastmod>
+         <lastmod>2025-05-21</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.codesyshelp.com/chapter_11/</loc>
+         <lastmod>2025-05-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.codesyshelp.com/chapter_2/</loc>
-         <lastmod>2024-10-30</lastmod>
+         <lastmod>2025-05-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.codesyshelp.com/chapter_3/</loc>
-         <lastmod>2024-10-30</lastmod>
+         <lastmod>2025-05-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.codesyshelp.com/chapter_4/</loc>
-         <lastmod>2024-10-30</lastmod>
+         <lastmod>2025-05-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.codesyshelp.com/chapter_5/</loc>
-         <lastmod>2024-10-30</lastmod>
+         <lastmod>2025-05-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.codesyshelp.com/chapter_6/</loc>
-         <lastmod>2024-10-30</lastmod>
+         <lastmod>2025-05-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.codesyshelp.com/chapter_7/</loc>
-         <lastmod>2024-10-30</lastmod>
+         <lastmod>2025-05-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.codesyshelp.com/chapter_8/</loc>
-         <lastmod>2024-10-30</lastmod>
+         <lastmod>2025-05-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.codesyshelp.com/chapter_9/</loc>
-         <lastmod>2024-10-30</lastmod>
+         <lastmod>2025-05-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
