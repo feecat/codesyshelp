@@ -10,6 +10,10 @@ nav:
     - 5 进阶调试: chapter_5.md
     - 6 实战技巧: chapter_6.md
     - 7 附录：电气基础: chapter_7.md
+    - 8 附录：博图Openness: chapter_8.md
+    - 9 附录：P-Net: chapter_9.md
+    - 10 附录：IgH与Ruckig: chapter_10.md
+    - 11 附录：PNDriver: chapter_11.md
 
     
 theme:
