@@ -15,6 +15,7 @@ nav:
     - 10 附录：IgH与Ruckig: chapter_10.md
     - 11 附录：PNDriver: chapter_11.md
     - 12 附录：S7RTT: chapter_12.md
+    - 13 附录：并发控制与通信机制: chapter_13.md
 
     
 theme:
