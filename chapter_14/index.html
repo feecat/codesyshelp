@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://www.codesyshelp.com/chapter_14/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>14 附录：AI时代的开发路线 - CODESYS应用指南</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link href="../highlight.css" rel="stylesheet" />
+        <link href="../style.css" rel="stylesheet" />
+    
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "14 \u9644\u5f55\uff1aAI\u65f6\u4ee3\u7684\u5f00\u53d1\u8def\u7ebf";
+        var mkdocs_page_input_path = "chapter_14.md";
+        var mkdocs_page_url = "/chapter_14/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+    <script src="../resources/highlight.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+ 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> CODESYS应用指南
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">0 引言</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_1/">1 软件安装</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_2/">2 基础知识</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_3/">3 总线的专用设置</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_4/">4 visu、softmotion、附加功能</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_5/">5 进阶调试</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_6/">6 实战技巧</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_7/">7 附录：电气基础</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_8/">8 附录：博图Openness</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_9/">9 附录：P-Net</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_10/">10 附录：IgH与Ruckig</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_11/">11 附录：PNDriver</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_12/">12 附录：S7RTT</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../chapter_13/">13 附录：并发控制与通信机制</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">14 附录：AI时代的开发路线</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#141">14.1 简介</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#142">14.2 平面设计</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#143">14.3 嵌入式开发</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#144">14.4 通用程序</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#145">14.5 实时控制</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#146">14.6 总结</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">CODESYS应用指南</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">14 附录：AI时代的开发路线</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="14-ai">14 附录：AI时代的开发路线</h1>
+<h2 id="141">14.1 简介</h2>
+<p>AI以旱地拔葱的速度提高了所有人的“智商”，尤其是在编程方面。在可预见的未来数年，大部分程序员会退化为项目经理，AI能够解决大部分标准和非标需求。本文我们主要讨论几种适合AI开发的框架，虽然AI有能力去做筛选和开发，但目前它对于长远规划的能力还弱于人类，需要项目经理进行导向和规划。</p>
+<p>目前主要在<strong>平面设计</strong>、<strong>嵌入式开发</strong>、<strong>程序编写</strong>等方面AI已经超越了大部分人类，而<strong>三维建模</strong>、<strong>长远规划</strong>、<strong>关键算法</strong>仍逊色于人类。我们需要区分哪些工作应该让AI来做，哪些工作自己做。AI是员工，是帮手，甚至可以是上级，但不是聊天工具，应尽量避免同一问题的多轮沟通<strike>（除了酒馆）</strike>。</p>
+<h2 id="142">14.2 平面设计</h2>
+<p>虽然现有的平面设计平台如可画、Figma，都在拼命往AI方向发展，也确实涌现了一些很好用的工具和插件，但我认为智商远比工具重要，Opus花十分钟做出来的效果DeepSeek一周也不一定做得出来。但是，对于没做过平面设计的人来说，我们还是要给AI导向。我们应当：</p>
+<ul>
+<li>尽可能用 HTML 来进行初期的布局、预览，后期可以转为 SVG 再到 PNG。</li>
+<li>尽可能利用开源库、组件、图标和字体。</li>
+</ul>
+<p>我们不应：</p>
+<ul>
+<li>生成 JPG、PNG 并在其基础上修改。</li>
+<li>直接生成 SVG，或直接生成整体项目。</li>
+</ul>
+<p>对于长文档，建议以 Markdown 撰写、由 Pandoc 生成生产环境的 PDF 文稿。这套流程很好用，唯一的缺点是配置较为麻烦，不过也可以交给 AI 来完成。</p>
+<h2 id="143">14.3 嵌入式开发</h2>
+<p>单片机和电路的设计阶段推荐用 <a href="https://www.kicad.org/">KiCad</a>，它开源，各类 AI 工具对它都有支持。但边界条件还是要人工审查，并且一定要多个 AI 交叉审查。调试可以用 VSCode 配 GDB/OpenOCD，甚至直接跑 CMD 命令，大多数时候通过串口调试是最方便快捷的，只有少数必须下断的时候才需要使用 GDB 调试。你甚至已经不需要自己去装 OpenOCD 插件、配置，只要规划好，全部交给 AI 实施即可。</p>
+<p>界面上，传统做法是 LVGL、TouchGFX 配点阵屏，手动算像素，开发很慢。AI 时代不是说抛弃 LVGL，很多场景仍然需要本地显示甚至裸机带屏，但我们不必再跟代码和布局死磕，可以交给 AI 来做。</p>
+<p>真正带来质变的是 WebUI：只要设备有网口或 WiFi，把打包好的 Vue/React 页面或静态 HTML 存进闪存，用户用手机或电脑连上局域网浏览器访问即可。原本在单片机上卡成 PPT 的动态仪表盘、实时曲线，在浏览器里就能丝滑运行，而且不需要为每种屏幕适配一遍 UI。</p>
+<p>对于 STM32 这类传统单片机、甚至没有网口的场景，可以用 Web Serial 做免安装上位机：浏览器直接访问串口，读写数据并绘制波形，用户不用装驱动、不用装软件。理想形态可以参考 <a href="https://mongoose.ws/device-dashboard/">Mongoose Device Dashboard</a>。</p>
+<p>需要注意的是：Flash 与 RAM 依然是硬约束。必要时可以外置 FLASH 或 SD 卡，并且不要把 UI 刷新放进实时控制循环，应交给独立的后台任务或独立的网络任务去处理。</p>
+<h2 id="144">14.4 通用程序</h2>
+<p>本节讨论 Windows 与 Linux 上的通用程序，即上位机、桌面工具与配置软件这一类应用。最推荐 Tauri 打包，前端使用 Vue 或 React，打包产物仅十几兆，并支持热重载调试。若无需安装包形态，也可将前端构建为静态资源，由后端兼做 HTTP 服务器，浏览器直接访问。</p>
+<p>若需精细控制窗口、菜单、多屏显示或 GPU 绘图，Tauri 的能力有限，可用 Rust 搭配 GPUI。其性能与内存占用均优于 WebView 方案，代价是生态尚小。后端语言方面，新应用不再推荐 C#，部分场景仍可考虑 C++，例如复用既有 Qt 资产、对接厂商 SDK，或对延迟与内存有硬性要求时。科研与小工具则可直接使用 Python。</p>
+<p>架构上仍应先统计需求，确认有无成熟开源组件可以复用。UI 库可由 AI 推荐后自行选定，主流选择为 Vuetify、Element Plus、Ant Design Vue 等。前期架构务必使用优质模型确定，框架选择失误会造成大量返工。</p>
+<h2 id="145">14.5 实时控制</h2>
+<p>实时控制实际上只有 C++ 一种选择。控制周期通常在 100 µs 到 4 ms 之间，一次 GC 停顿或解释器抖动就足以丢帧，这里比的是最坏情况，而不是平均值；可预测的内存行为、可显式控制的指令顺序与内存可见性、成熟的实时环境支持（PREEMPT_RT、CPU 亲和性、实时调度策略），主流语言里只有 C++ 同时具备。</p>
+<h2 id="146">14.6 总结</h2>
+<p>近一年来，我用 AI 做了几个嵌入式相关的项目，总结下来还是那几条经验。</p>
+<ul>
+<li>文件要拆散。单个文件不宜过大，按文件夹归类，头文件尽量加注释，注释尽量用英文。</li>
+<li>对话超过四五轮就换模型。避免在一个问题上纠缠太久。</li>
+<li>不明确的改动先要方案。让 AI 先给思路，不要直接动代码，确认之后再实施。改动越大越要如此，必要时可以用插件做规划。</li>
+<li>使用 Git 进行版本管理。AI 的修改是批量的，没有 Git 兜底，一次误改就可能丢掉半天的工作。</li>
+</ul>
+<p>截至编写本文时，规划与复杂问题的调试适合用 Claude 或 Codex，细节功能的实施适合用 DeepSeek。如果预算充足，也可以只用最高端的模型。插件和技能我认为并不重要，文档是必要的，但也可以让 AI 来写。</p>
+<p>当前的 AI 仍然需要人工审查和导向，它擅长实现，不擅长判断。但发展极快，我相信不久的将来可以做到“许愿式”编程，也或许这个“将来”已经到来了。</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../chapter_13/" class="btn btn-neutral float-left" title="13 附录：并发控制与通信机制"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../chapter_13/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
